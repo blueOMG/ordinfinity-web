@@ -570,7 +570,7 @@
         window.open('https://ordinfinity.gitbook.io/docs/','_blank');
       },
       jumpMint(){
-        window.open('https://mint.ordinfinity.io','_blank');
+        window.open('https://blueomg.github.io/ordinfinity-mint/','_blank');
       },
       init: function() {
         const SEPARATION = 100

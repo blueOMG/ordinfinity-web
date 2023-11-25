@@ -30,7 +30,7 @@
                   <a href="javascript:void(0);" style="padding-left: 2px;"><img src="static/assets/images/index/06.png"/></a>
                   <a href="javascript:void(0);" style="padding-left: 2px;"></a>
 
-                  <a class="ahr" href="https://app.ordinfinity.io/#/" target="_blank">
+                  <a class="ahr" href="https://blueomg.github.io/ordinfinity-app/" target="_blank">
                     <button class="login-btn">LAUNCH APP</button>
                   </a>
                 </li>
