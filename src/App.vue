@@ -1,97 +1,124 @@
 <template>
-<div>
-  <!-- Preloader Starts -->
-  <div class="preloader">
-    <div class="spinner"></div>
+  <div>
+  <!-- header -->
+  <div class="headerbox" :class="{'headerbg': showHeaderbg}">
+    <img src="./assets/img/header/logo.png" alt="" class="h-logo"/>
+    <div class="rightbox">
+      <img src="./assets/img/header/discord.png" alt="" class="h-discord hover-scale"/>
+      <img src="./assets/img/header/tg.png" alt="" class="h-tg hover-scale"/>
+      <img src="./assets/img/header/x.png" alt="" class="h-x hover-scale"/>
+      <div class="h-lunchapp hover-scale">LAUNCH APP</div>
+    </div>
   </div>
-  <!-- Preloader End -->
-
-  <!-- Header Area Starts -->
-  <header class="header-area single-page">
-    <div class="header-top">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-2">
-            <div class="logo-area">
-              <router-link to="/"><img id="logo" src="static/assets/images/logo/logo.png" alt="logo"></router-link>
-            </div>
-          </div>
-          <div class="col-lg-10">
-            <div class="custom-navbar">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <div class="main-menu main-menu-light">
-              <ul>
-                <li class="menu-btn">
-                  <a href="https://twitter.com/ordinfinity/" target="_blank" style="padding-left: 2px;"><img src="static/assets/images/index/04.png"/></a>
-                  <a href="https://t.me/ordinfinity_community" target="_blank" style="padding-left: 2px;"><img src="static/assets/images/index/05.png"/></a>
-                  <a href="javascript:void(0);" style="padding-left: 2px;"><img src="static/assets/images/index/06.png"/></a>
-                  <a href="javascript:void(0);" style="padding-left: 2px;"></a>
-
-                  <a class="ahr" href="https://blueomg.github.io/ordinfinity-app/" target="_blank">
-                    <button class="login-btn">LAUNCH APP</button>
-                  </a>
-                </li>
-                <!-- <li><button class="login-btn">LAUNCH APP</button>
-                  <ul class="sub-menu">
-                    <li><router-link to="/">Swap</router-link></li>
-                    <li><router-link to="/">Farm</router-link></li>
-                    <li><router-link to="/">LP pools</router-link></li>
-                    <li><router-link to="/">Lending</router-link></li>
-                    <li><router-link to="/">Launchpad</router-link></li>
-                  </ul>
-                </li> -->
-              </ul>
-            </div>
-          </div>
+  <!-- content -->
+  <div>
+    <div class="mintbox">
+      <img src="./assets/img/home/bg1.png" alt="" style="width: 100%; " />
+      <div class="mintcontentbox">
+        <div class="minttext1">MAKE ORDINALS INFINITY</div>
+        <div class="minttext2">THE FIRST</div>
+        <div class="minttext2">BRC20 Multi-Chain Liquidity Protocol</div>
+        <div class="mintbtn hover-scale">MINT</div>
+      </div>
+    </div>
+    <div class="buildbox">
+      <div class="buildtext1">Build BRC20 liquidity</div>
+      <div class="buildtext2">The Ultimate Router for</div>
+      <div class="buildtext2">Ordinals BRC20</div>
+      <div class="chainbox">
+        <div class="chainitem">
+          <img src="./assets/img/home/eth.png" alt="" />
+          <span>Ethereum</span>
+        </div>
+        <div class="chainitem">
+          <img src="./assets/img/home/bnb.png" alt="" />
+          <span>Binance</span>
+        </div>
+        <div class="chainitem">
+          <img src="./assets/img/home/btc.png" alt="" />
+          <span>Bitcoin</span>
+        </div>
+        <div class="chainitem">
+          <img src="./assets/img/home/zks.png" alt="" />
+          <span>zkSync</span>
+        </div>
+        <div class="chainitem">
+          <img src="./assets/img/home/arb.png" alt="" />
+          <span>Arbitrum</span>
         </div>
       </div>
     </div>
-  </header>
-
-  <vue-particles
-    color="#ffffff"
-    :particleOpacity="0.2"
-    :particlesNumber="60"
-    shapeType="circle"
-    :particleSize="6"
-    linesColor="#ffffff"
-    :linesWidth="1"
-    :lineLinked="true"
-    :lineOpacity="0.2"
-    :linesDistance="150"
-    :moveSpeed="3"
-    :hoverEffect="true"
-    hoverMode="grab"
-    :clickEffect="true"
-    clickMode="push">
-  </vue-particles>
-  <!-- Header Area End -->
-  <router-view></router-view>
-
-  <!-- Modal -->
-  <div class="modal fade" id="connModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Connect</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <div class="earnbox">
+      <div class="earnboxleft">
+        <span class="earntext1">Earn Interest </span>
+        <span class="earntext2">Borrow Assets Cross-Chain</span>
+        <span class="earntext2">Seamlessly</span>
+      </div>
+      <img src="./assets/img/home/img1.png" alt="" class="earnboximg" />
+    </div>
+    <div class="worksbox">
+      <div class="workstitle">How It Works</div>
+      <div class="workscontent">
+        <div class="worksitem">
+          <img src="./assets/img/home/works1.png" alt="" style="width: 120px; margin-bottom: 30px;"/>
+          <div class="itemtext1">Stake $ONFI</div>
+          <div class="itemtext2">Receive revenue from interest and flash loan fees</div>
         </div>
-        <div class="modal-body">
-          <div class="connDiv" @click="connect" v-if="isMetaMaskInstall">
-            <div><img src="static/assets/images/index/1.svg" style="width: 50px;"/></div>
-            <div class="connDiv-name">MetaMask</div>
-            <div class="connDiv-desc">Connect to your MetaMask Wallet</div>
-          </div>
-          <div class="connDiv" @click="connect2">
-            <div><img src="static/assets/images/index/2.svg" style="width: 50px;"/></div>
-            <div class="connDiv-name">WalletConnect</div>
-            <div class="connDiv-desc">Scan with WalletConnect to connect</div>
-          </div>
+        <div class="worksitem">
+          <img src="./assets/img/home/works2.png" alt="" style="height: 120px; margin-bottom: 22px;"/>
+          <div class="itemtext1">Access boosted emissions</div>
+          <div class="itemtext2">Locked liquidity activates lending and borrowing RDNT emissions</div>
+        </div>
+        <div class="worksitem">
+          <img src="./assets/img/home/works3.png" alt="" style="width: 120px; margin-bottom: 40px;"/>
+          <div class="itemtext1">Accumulate tokens</div>
+          <div class="itemtext2">Paid in blue chip assets such as BTC, ETH, ORDI, SATS, etc.</div>
+        </div>
+      </div>
+      <div class="worksbtn">
+        <div class="workbtn1 hover-scale">ONFI STAKERS</div>
+        <div class="workbtn2 hover-scale">Lenders & Borrowers</div>
+      </div>
+    </div>
+    <div class="ordinbox">
+      <div class="ordintitle">WHY ORDINFINITY</div>
+      <div class="ordincontent">
+        <div class="ordinitem hover-scale">
+          <img src="./assets/img/home/ordin1.png" alt="" style="width: 120px;margin-bottom: 24px;margin-top: 69px;" />
+          <span>Easy and fast BRC20 transactions</span>
+        </div>
+        <div class="ordinitem hover-scale">
+          <img src="./assets/img/home/ordin2.png" alt="" style="width: 120px;margin-bottom: 20px;margin-top: 65px;" />
+          <span>Bringing utility to BRC20, more token rewards system.</span>
+        </div>
+        <div class="ordinitem hover-scale">
+          <img src="./assets/img/home/ordin3.png" alt="" style="height: 95px;margin-bottom: 29px;margin-top: 75px;" />
+          <span>Enables Defi users to seamlessly connect to Ordinals, bringing incremental growth to ordinals</span>
+        </div>
+        <div class="ordinitem hover-scale">
+          <img src="./assets/img/home/ordin4.png" alt="" style="width: 120px;margin-bottom: 24px;margin-top: 69px;" />
+          <span>More decentralized than Ordinals native</span>
+        </div>
+      </div>
+    </div>
+    <div class="footerbox">
+      <img src="./assets/img/header/logo.png" style="height: 32px;" alt="" />
+      <div class="f-right">
+        <div class="f-right-info">
+          <span class="hover-scale">About</span>
+          <span class="hover-scale">Docs</span>
+          <span class="hover-scale">FAQ</span>
+        </div>
+        <div class="f-right-info">
+          <span class="hover-scale">Developers</span>
+          <span class="hover-scale">Github</span>
+        </div>
+        <div class="f-right-info">
+          <span class="hover-scale">Product</span>
+          <span class="hover-scale">Bridge</span>
+          <span class="hover-scale">Swap</span>
+          <span class="hover-scale">Lend</span>
+          <span class="hover-scale">Governance</span>
         </div>
       </div>
     </div>
@@ -99,18 +126,22 @@
 </div>
 </template>
 <script>
-//import { initializeApp } from "firebase/app";
-//import { getAnalytics } from "firebase/analytics";
 export default {
   name: 'app',
   data() {
     return {
-      isLogin: false,
-      isMetaMaskInstall: false,
+      showHeaderbg: false
     };
   },
-  created: function() {
-    this.init();
+  created() {
+    const self= this;
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 100) {
+        self.showHeaderbg = true; // 改变背景颜色
+      } else {
+        self.showHeaderbg = false;  // 恢复初始背景颜色
+      }
+    });
   },
   methods: {
     launch(){
@@ -139,171 +170,386 @@ export default {
       // getAnalytics(app);
 
 
-      if (typeof window.ethereum !== 'undefined') {
-        console.log('MetaMask is installed!');
-        this.isMetaMaskInstall = true;
-      } else {
-        console.log('MetaMask is not installed.');
-        this.isMetaMaskInstall = false;
-      }
+      // if (typeof window.ethereum !== 'undefined') {
+      //   console.log('MetaMask is installed!');
+      //   this.isMetaMaskInstall = true;
+      // } else {
+      //   console.log('MetaMask is not installed.');
+      //   this.isMetaMaskInstall = false;
+      // }
     }
   },
 }
 </script>
 <style>
-
-#particles-js {
-  width: 100%;
-  height: calc(100% - 100px);
-  position: absolute;
-}
-
-#logo{
-  width: 110px;
-  height: auto;
-}
-.header-area.single-page{
-  background-color: #000000;
+.headerbox {
   position: fixed;
-  z-index: 999;
   top: 0;
+  left: 0;
   width: 100%;
+  padding: 32px 0;
+  padding-left: 38px;
+  padding-right: 28px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 50;
 }
-
-.header-top{
-  padding-bottom: 0px;
+.headerbg {
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
 }
-.top-one{
-  padding-top: 100px;
+.h-logo {
+  height: 32px;
+  width: auto;
 }
-
-.main-menu ul li a img{
-  width: 45px;
+.rightbox {
+  display: flex;
+  align-items: center;
 }
-
-.main-menu ul li a{
-  padding: 8px;
-}
-
-.login-btn {
-  width: 150px;
-  height: 45px;
-  border: 1px solid #ffffff;
-  border-radius: 10px;
-  color: #ffffff;
-  font-size: large;
-  background-color: #000000;
-}
-
-.login-btn:hover{
-  border: 1px solid #e99d42;
-  background-color: #e99d42;
-  color: #000000;
-}
-
-.launch-btn{
-  width: 160px;
-  height: 50px;
-  text-align: center;
-  vertical-align: middle;
-  border: 1px solid #ffffff;
-  border-radius: 10px;
-  color: #ffffff;
-  background-color: #000000;
-}
-
-.launch-btn:hover{
-  border: 1px solid #e99d42;
-  background-color: #e99d42;
-}
-
-
-
-.connDiv{
-  width: 100%;
-  text-align: center;
-  border-radius: 20px;
-  padding: 10px;
+.h-discord {
+  width: 50px;
+  height: auto;
+  margin-right: 50px;
   cursor: pointer;
 }
-
-.connDiv:hover{
-  background-color: #CCCCCC;
+.h-tg {
+  width: 32px;
+  margin-right: 50px;
+  cursor: pointer;
 }
-
-.connDiv-name{
-  padding-top: 10px;
-  font-size: 30px;
-  color: #ff9f55;
+.h-x {
+  width: 28px;
+  margin-right: 50px;
+  cursor: pointer;
 }
-
-.connDiv-desc{
-  padding-top: 10px;
+.h-lunchapp {
+  width: 200px;
+  height: 50px;
+  background: #F7931A;
+  box-shadow: inset 0px -3px 0px 0px rgba(0,0,0,0.6);
+  border-radius: 12px 12px 12px 12px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 22px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 400;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.mintbox {
+  position: relative;
+}
+.mintcontentbox {
+  background: rgba(0,0,0,0.5);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+.minttext1 {
+  margin-top: 100px;
+  font-size: 72px;
+  font-family: Montserrat, Montserrat;
+  font-weight: 900;
+  color: #FFFFFF;
+  line-height: 88px;
+  letter-spacing: 7px;
+  margin-bottom: 23px;
+}
+.minttext2 {
+  font-size: 50px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 300;
+  color: #FFFFFF;
+  line-height: 72px;
+  text-align: center;
+}
+.mintbtn {
+  width: 236px;
+  height: 60px;
+  background: #F7931A;
+  box-shadow: inset 0px -3px 0px 0px rgba(0,0,0,0.6);
+  border-radius: 316px 316px 316px 316px;
+  line-height: 60px;
+  text-align: center;
+  font-size: 22px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-top: 55px;
+}
+.buildbox {
+  width: 100%;
+  height: 766px;
+  background: url('./assets/img/home/bg2.png') no-repeat;
+  background-size: cover;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.buildtext1 {
+  font-size: 86px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 700;
+  line-height: 125px;
+  background: linear-gradient(90deg, #FF9D01 0%, #FFDBA2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 7px;
+}
+.buildtext2 {
+  font-size: 64px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 400;
+  color: rgba(0,0,0,0);
+  line-height: 93px;
+  -webkit-text-stroke: 1px #FFFFFF;
+  text-stroke: 1px #FFFFFF;
+}
+.chainbox {
+  margin-top: 55px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.chainitem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  height: 60px;
+  background: rgba(247,147,26,0.1);
+  border-radius: 68px 68px 68px 68px;
+  opacity: 1;
+  border: 1px solid #F7931A;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.chainitem:last-child {
+  margin-right: 0;
+}
+.chainitem img {
+  width: 40px;
+  margin-right: 10px;
+}
+.chainitem span {
   font-size: 20px;
-  color: black;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 400;
+  color: #FFFFFF;
 }
-
-@media (min-width: 768px) and (max-width: 991.98px) {
-
-  .login-btn {
-    width: 180px;
-    height: 50px;
-  }
-  #logo{
-    width: 120px;
-  }
-  .main-menu ul li a img{
-    width: 45px;
-  }
-
+.earnbox {
+  width: 100%;
+  height: 960px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-@media (min-width: 576px) and (max-width: 767.98px) {
-
-  .login-btn {
-    width: 160px;
-    height: 40px;
-  }
-  #logo{
-    width: 110px;
-  }
-
-  .main-menu ul li a img{
-    width: 40px;
-  }
-
+.earnboxleft {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
-
-@media (max-width: 575.98px) {
-  .login-btn {
-    width: 140px;
-    height: 30px;
-  }
-  #logo{
-    width: 100px;
-  }
-
-  .main-menu ul li a img{
-    width: 30px;
-  }
+.earnboximg {
+  width: 664px;
+  height: auto;
+  margin-left: 24px;
 }
-.ahr{
-  border: none;
+.earntext1 {
+  font-size: 100px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 900;
+  color: #FFFFFF;
+  line-height: 145px;
 }
-ahr:link{
-	color: #fff;
+.earntext2 {
+  font-size: 50px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 72px;
 }
-ahr:visited{
-	color: #fff;
+.worksbox {
+  width: 100%;
+  height: 810px;
+  background: url('./assets/img/home/bg3.png') no-repeat;
+  background-color: #171717;
+  background-size: cover;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-ahr:hover{
-	color: #fff;
+.workstitle {
+  font-size: 60px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 900;
+  color: #FFFFFF;
+  line-height: 87px;
+  margin-bottom: 110px;
 }
-ahr:active{
-	color: #fff;
+.workscontent {
+  display: flex;
+  justify-content: center;
 }
-
-
+.worksitem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.worksitem:nth-child(2) {
+  margin: 0 150px;
+}
+.itemtext1 {
+  font-size: 30px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 500;
+  color: #FF8C00;
+  line-height: 43px;
+  margin-bottom: 20px;
+}
+.itemtext2 {
+  width: 322px;
+  font-size: 18px;
+  font-family: Alibaba PuHuiTi 2.0, Alibaba PuHuiTi 20;
+  font-weight: 250;
+  color: #FFFFFF;
+  line-height: 28px;
+  text-align: center;
+}
+.worksbtn {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+}
+.workbtn1 {
+  width: 260px;
+  height: 60px;
+  background: #F7931A;
+  box-shadow: inset 0px -3px 0px 0px rgba(0,0,0,0.6);
+  border-radius: 316px 316px 316px 316px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 18px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 700;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.workbtn2 {
+  margin-left: 40px;
+  width: 260px;
+  height: 60px;
+  background: rgba(247,147,26,0.1);
+  border-radius: 68px 68px 68px 68px;
+  border: 1px solid #F7931A;
+  text-align: center;
+  line-height: 60px;
+  font-size: 18px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 700;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.ordinbox {
+  width: 100%;
+  height: 750px;
+  background: url('./assets/img/home/bg4.png') no-repeat;
+  background-size: cover;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.ordintitle {
+  font-size: 60px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 900;
+  color: #FFFFFF;
+  line-height: 87px;
+  margin-bottom: 100px;
+}
+.ordincontent {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+.ordinitem {
+  width: 331px;
+  height: 400px;
+  background: #171717;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 60px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+.ordinitem:last-child {
+  margin-right: 0;
+}
+.ordinitem span {
+  width: 294px;
+  font-size: 20px;
+  font-family: Alibaba PuHuiTi 2.0, Alibaba PuHuiTi 20;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 28px;
+  text-align: center;
+}
+.footerbox {
+  display: flex;
+  justify-content: space-between;
+  padding: 80px 252px;
+  background: url('./assets/img/home/bg5.png') no-repeat;
+  background-size: cover;
+}
+.f-right {
+  display: flex;
+}
+.f-right-info {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 65px;
+}
+.f-right-info:last-child {
+  margin-right: 0;
+}
+.f-right-info span {
+  font-size: 16px;
+  font-family: Alibaba PuHuiTi 2.0, Alibaba PuHuiTi 20;
+  font-weight: 250;
+  color: #E0E0E0;
+  line-height: 38px;
+  cursor: pointer;
+  text-align: left;
+}
+.f-right-info span:first-child {
+  font-size: 20px;
+  font-family: Alibaba PuHuiTi 2.0, Alibaba PuHuiTi 20;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 30px;
+  margin-bottom: 20px;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease
+}
 </style>
 
 
