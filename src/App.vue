@@ -140,8 +140,7 @@
         </div>
       </div>
     </div>
-    <div style="width:100vw;overflow: hidden;">
-  </div>
+    
   </div>
 </div>
 </template>
