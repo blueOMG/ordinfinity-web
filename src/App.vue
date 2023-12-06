@@ -58,7 +58,11 @@
     </div>
     <div class="worksbox">
       <div class="workstitle">How It Works</div>
-      <div class="workscontent">
+      <div class="worksbtn">
+        <div class="workbtn hover-scale" :class="{'workbtnSelected': worksTab==1}" @click="worksTab = 1">ONFI STAKERS</div>
+        <div class="workbtn hover-scale" :class="{'workbtnSelected': worksTab==2}" @click="worksTab = 2">Lenders & Borrowers</div>
+      </div>
+      <div class="workscontent" v-show="worksTab==1">
         <div class="worksitem">
           <img src="./assets/img/home/works1.png" alt="" style="width: 120px; margin-bottom: 30px;"/>
           <div class="itemtext1">Stake $ONFI</div>
@@ -75,10 +79,24 @@
           <div class="itemtext2">Paid in blue chip assets such as BTC, ETH, ORDI, SATS, etc.</div>
         </div>
       </div>
-      <div class="worksbtn">
-        <div class="workbtn1 hover-scale">ONFI STAKERS</div>
-        <div class="workbtn2 hover-scale">Lenders & Borrowers</div>
+      <div class="workscontent" v-show="worksTab==2">
+        <div class="worksitem">
+          <img src="./assets/img/home/works4.png" alt="" style="width: 120px; margin-bottom: 30px;"/>
+          <div class="itemtext1">Lend collateral</div>
+          <div class="itemtext2">Unlock the full potential of your assets</div>
+        </div>
+        <div class="worksitem">
+          <img src="./assets/img/home/works5.png" alt="" style="height: 120px; margin-bottom: 22px;"/>
+          <div class="itemtext1">Borrow & bridge cross-chain</div>
+          <div class="itemtext2">Use capital on any chain without selling the underlying asset</div>
+        </div>
+        <div class="worksitem">
+          <img src="./assets/img/home/works6.png" alt="" style="width: 120px; margin-bottom: 40px;"/>
+          <div class="itemtext1">Leverage collateral</div>
+          <div class="itemtext2">Automate lend-borrow loops up to 5x to earn higher APRs</div>
+        </div>
       </div>
+      
     </div>
     <div class="ordinbox">
       <div class="ordintitle">WHY ORDINFINITY</div>
@@ -122,6 +140,8 @@
         </div>
       </div>
     </div>
+    <div style="width:100vw;overflow: hidden;">
+  </div>
   </div>
 </div>
 </template>
@@ -130,7 +150,8 @@ export default {
   name: 'app',
   data() {
     return {
-      showHeaderbg: false
+      showHeaderbg: false,
+      worksTab: 1
     };
   },
   created() {
@@ -429,39 +450,34 @@ export default {
   text-align: center;
 }
 .worksbtn {
-  margin-top: 100px;
+  margin-bottom: 100px;
   display: flex;
   justify-content: center;
 }
-.workbtn1 {
+.workbtn {
   width: 260px;
   height: 60px;
+  border-radius: 316px 316px 316px 316px;
+  line-height: 60px;
+  font-size: 18px;
+  font-family: Source Han Sans, Source Han Sans;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  color: #FFFFFF;
+  background: rgba(247,147,26,0.1);
+  border: 1px solid #F7931A;
+}
+.workbtn:last-child {
+  margin-left: 40px;
+}
+.workbtnSelected {
+  border: none;
   background: #F7931A;
   box-shadow: inset 0px -3px 0px 0px rgba(0,0,0,0.6);
-  border-radius: 316px 316px 316px 316px;
-  text-align: center;
-  line-height: 60px;
-  font-size: 18px;
-  font-family: Source Han Sans, Source Han Sans;
-  font-weight: 700;
   color: #FFFFFF;
-  cursor: pointer;
 }
-.workbtn2 {
-  margin-left: 40px;
-  width: 260px;
-  height: 60px;
-  background: rgba(247,147,26,0.1);
-  border-radius: 68px 68px 68px 68px;
-  border: 1px solid #F7931A;
-  text-align: center;
-  line-height: 60px;
-  font-size: 18px;
-  font-family: Source Han Sans, Source Han Sans;
-  font-weight: 700;
-  color: #FFFFFF;
-  cursor: pointer;
-}
+
 .ordinbox {
   width: 100%;
   height: 750px;
@@ -516,6 +532,7 @@ export default {
   padding: 80px 252px;
   background: url('./assets/img/home/bg5.png') no-repeat;
   background-size: cover;
+  background-color: #171717;
 }
 .f-right {
   display: flex;
