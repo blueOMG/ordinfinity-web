@@ -69094,7 +69094,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 73:
+/***/ 76:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -71725,7 +71725,7 @@ if (inBrowser && window.Vue) {
 
 /***/ }),
 
-/***/ 74:
+/***/ 77:
 /***/ (function(module, exports) {
 
 /**
@@ -71759,7 +71759,7 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ }),
 
-/***/ 75:
+/***/ 78:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -72704,7 +72704,7 @@ var index_esm = {
 
 /***/ }),
 
-/***/ 76:
+/***/ 79:
 /***/ (function(module, exports) {
 
 /*
@@ -72761,7 +72761,7 @@ module.exports = function() {
 
 /***/ }),
 
-/***/ 77:
+/***/ 80:
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -72780,7 +72780,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(74)
+var listToStyles = __webpack_require__(77)
 
 /*
 type StyleObject = {
@@ -72987,7 +72987,7 @@ function applyToTag (styleElement, obj) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_particles_vue__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_particles_vue__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vue_particles_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__vue_particles_vue__);
 /* eslint-disable */
 
@@ -73007,4 +73007,4 @@ const VueParticles = {
 /***/ })
 
 });
-//# sourceMappingURL=vendor.8dbe0bbbf469aa9ee5d8.js.map
+//# sourceMappingURL=vendor.238f113dca6967a161d9.js.map
