@@ -1,180 +1,250 @@
 <template>
   <div>
-  <!-- header -->
-  <div class="headerbox" :class="{'headerbg': showHeaderbg}">
-    <img src="./assets/img/header/logo.png" alt="" class="h-logo"/>
-    <div class="rightbox">
-      <img src="./assets/img/header/discord.png" alt="" class="h-discord hover-scale"/>
-      <img src="./assets/img/header/tg.png" alt="" class="h-tg hover-scale"/>
-      <img src="./assets/img/header/x.png" alt="" class="h-x hover-scale"/>
-      <div class="h-lunchapp hover-scale">LAUNCH APP</div>
+    <!-- header -->
+    <div class="headerbox" :class="{ headerbg: showHeaderbg }">
+      <img src="./assets/img/header/logo.png" alt="" class="h-logo" />
+      <div class="rightbox">
+        <img
+          src="./assets/img/header/discord.png"
+          alt=""
+          class="h-discord hover-scale"
+        />
+        <img src="./assets/img/header/tg.png" alt="" class="h-tg hover-scale" />
+        <img src="./assets/img/header/x.png" alt="" class="h-x hover-scale" />
+        <div class="h-lunchapp hover-scale">LAUNCH APP</div>
+      </div>
+    </div>
+    <!-- content -->
+    <div>
+      <div class="mintbox">
+        <img src="./assets/img/home/bg1.png" alt="" style="width: 100%" />
+        <div class="mintcontentbox">
+          <div class="minttext1">MAKE ORDINALS INFINITY</div>
+          <div class="minttext2">THE FIRST</div>
+          <div class="minttext2">BRC20 Multi-Chain Liquidity Protocol</div>
+          <a href="https://comsats.io/brc-20" target="_blank">
+            <div class="mintbtn hover-scale">MINT</div>
+          </a>
+        </div>
+      </div>
+      <div class="buildbox">
+        <div class="buildtext1">Build BRC20 liquidity</div>
+        <div class="buildtext2">The Ultimate Router for</div>
+        <div class="buildtext2">Ordinals BRC20</div>
+        <div class="chainbox">
+          <div class="chainitem">
+            <img src="./assets/img/home/eth.png" alt="" />
+            <span>Ethereum</span>
+          </div>
+          <div class="chainitem">
+            <img src="./assets/img/home/bnb.png" alt="" />
+            <span>Binance</span>
+          </div>
+          <div class="chainitem">
+            <img src="./assets/img/home/btc.png" alt="" />
+            <span>Bitcoin</span>
+          </div>
+          <div class="chainitem">
+            <img src="./assets/img/home/zks.png" alt="" />
+            <span>zkSync</span>
+          </div>
+          <div class="chainitem">
+            <img src="./assets/img/home/arb.png" alt="" />
+            <span>Arbitrum</span>
+          </div>
+        </div>
+      </div>
+      <div class="earnbox">
+        <div class="earnboxleft">
+          <span class="earntext1">Earn Interest </span>
+          <span class="earntext2">Borrow Assets Cross-Chain</span>
+          <span class="earntext2">Seamlessly</span>
+        </div>
+        <img src="./assets/img/home/img1.png" alt="" class="earnboximg" />
+      </div>
+      <div class="worksbox">
+        <div class="workstitle">How It Works</div>
+        <div class="worksbtn">
+          <div
+            class="workbtn hover-scale"
+            :class="{ workbtnSelected: worksTab == 1 }"
+            @click="worksTab = 1"
+          >
+            ONFI STAKERS
+          </div>
+          <div
+            class="workbtn hover-scale"
+            :class="{ workbtnSelected: worksTab == 2 }"
+            @click="worksTab = 2"
+          >
+            Lenders & Borrowers
+          </div>
+        </div>
+        <div class="workscontent" v-show="worksTab == 1">
+          <div class="worksitem">
+            <img
+              src="./assets/img/home/works1.png"
+              alt=""
+              style="width: 120px; margin-bottom: 30px"
+            />
+            <div class="itemtext1">Stake $ONFI</div>
+            <div class="itemtext2">
+              Receive revenue from interest and flash loan fees
+            </div>
+          </div>
+          <div class="worksitem">
+            <img
+              src="./assets/img/home/works2.png"
+              alt=""
+              style="height: 120px; margin-bottom: 22px"
+            />
+            <div class="itemtext1">Access boosted emissions</div>
+            <div class="itemtext2">
+              Locked liquidity activates lending and borrowing RDNT emissions
+            </div>
+          </div>
+          <div class="worksitem">
+            <img
+              src="./assets/img/home/works3.png"
+              alt=""
+              style="width: 120px; margin-bottom: 40px"
+            />
+            <div class="itemtext1">Accumulate tokens</div>
+            <div class="itemtext2">
+              Paid in blue chip assets such as BTC, ETH, ORDI, SATS, etc.
+            </div>
+          </div>
+        </div>
+        <div class="workscontent" v-show="worksTab == 2">
+          <div class="worksitem">
+            <img
+              src="./assets/img/home/works4.png"
+              alt=""
+              style="width: 120px; margin-bottom: 30px"
+            />
+            <div class="itemtext1">Lend collateral</div>
+            <div class="itemtext2">
+              Unlock the full potential of your assets
+            </div>
+          </div>
+          <div class="worksitem">
+            <img
+              src="./assets/img/home/works5.png"
+              alt=""
+              style="height: 120px; margin-bottom: 22px"
+            />
+            <div class="itemtext1">Borrow & bridge cross-chain</div>
+            <div class="itemtext2">
+              Use capital on any chain without selling the underlying asset
+            </div>
+          </div>
+          <div class="worksitem">
+            <img
+              src="./assets/img/home/works6.png"
+              alt=""
+              style="width: 120px; margin-bottom: 40px"
+            />
+            <div class="itemtext1">Leverage collateral</div>
+            <div class="itemtext2">
+              Automate lend-borrow loops up to 5x to earn higher APRs
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ordinbox">
+        <div class="ordintitle">WHY ORDINFINITY</div>
+        <div class="ordincontent">
+          <div class="ordinitem hover-scale">
+            <img
+              src="./assets/img/home/ordin1.png"
+              alt=""
+              style="width: 120px; margin-bottom: 24px; margin-top: 69px"
+            />
+            <span>Easy and fast BRC20 transactions</span>
+          </div>
+          <div class="ordinitem hover-scale">
+            <img
+              src="./assets/img/home/ordin2.png"
+              alt=""
+              style="width: 120px; margin-bottom: 20px; margin-top: 65px"
+            />
+            <span>Bringing utility to BRC20, more token rewards system.</span>
+          </div>
+          <div class="ordinitem hover-scale">
+            <img
+              src="./assets/img/home/ordin3.png"
+              alt=""
+              style="height: 95px; margin-bottom: 29px; margin-top: 75px"
+            />
+            <span
+              >Enables Defi users to seamlessly connect to Ordinals, bringing
+              incremental growth to ordinals</span
+            >
+          </div>
+          <div class="ordinitem hover-scale">
+            <img
+              src="./assets/img/home/ordin4.png"
+              alt=""
+              style="width: 120px; margin-bottom: 24px; margin-top: 69px"
+            />
+            <span>More decentralized than Ordinals native</span>
+          </div>
+        </div>
+      </div>
+      <div class="footerbox">
+        <img src="./assets/img/header/logo.png" style="height: 32px" alt="" />
+        <div class="f-right">
+          <div class="f-right-info">
+            <span class="hover-scale">About</span>
+            <span class="hover-scale">Docs</span>
+            <span class="hover-scale">FAQ</span>
+          </div>
+          <div class="f-right-info">
+            <span class="hover-scale">Developers</span>
+            <span class="hover-scale">Github</span>
+          </div>
+          <div class="f-right-info">
+            <span class="hover-scale">Product</span>
+            <span class="hover-scale">Bridge</span>
+            <span class="hover-scale">Swap</span>
+            <span class="hover-scale">Lend</span>
+            <span class="hover-scale">Governance</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- content -->
-  <div>
-    <div class="mintbox">
-      <img src="./assets/img/home/bg1.png" alt="" style="width: 100%; " />
-      <div class="mintcontentbox">
-        <div class="minttext1">MAKE ORDINALS INFINITY</div>
-        <div class="minttext2">THE FIRST</div>
-        <div class="minttext2">BRC20 Multi-Chain Liquidity Protocol</div>
-        <div class="mintbtn hover-scale">MINT</div>
-      </div>
-    </div>
-    <div class="buildbox">
-      <div class="buildtext1">Build BRC20 liquidity</div>
-      <div class="buildtext2">The Ultimate Router for</div>
-      <div class="buildtext2">Ordinals BRC20</div>
-      <div class="chainbox">
-        <div class="chainitem">
-          <img src="./assets/img/home/eth.png" alt="" />
-          <span>Ethereum</span>
-        </div>
-        <div class="chainitem">
-          <img src="./assets/img/home/bnb.png" alt="" />
-          <span>Binance</span>
-        </div>
-        <div class="chainitem">
-          <img src="./assets/img/home/btc.png" alt="" />
-          <span>Bitcoin</span>
-        </div>
-        <div class="chainitem">
-          <img src="./assets/img/home/zks.png" alt="" />
-          <span>zkSync</span>
-        </div>
-        <div class="chainitem">
-          <img src="./assets/img/home/arb.png" alt="" />
-          <span>Arbitrum</span>
-        </div>
-      </div>
-    </div>
-    <div class="earnbox">
-      <div class="earnboxleft">
-        <span class="earntext1">Earn Interest </span>
-        <span class="earntext2">Borrow Assets Cross-Chain</span>
-        <span class="earntext2">Seamlessly</span>
-      </div>
-      <img src="./assets/img/home/img1.png" alt="" class="earnboximg" />
-    </div>
-    <div class="worksbox">
-      <div class="workstitle">How It Works</div>
-      <div class="worksbtn">
-        <div class="workbtn hover-scale" :class="{'workbtnSelected': worksTab==1}" @click="worksTab = 1">ONFI STAKERS</div>
-        <div class="workbtn hover-scale" :class="{'workbtnSelected': worksTab==2}" @click="worksTab = 2">Lenders & Borrowers</div>
-      </div>
-      <div class="workscontent" v-show="worksTab==1">
-        <div class="worksitem">
-          <img src="./assets/img/home/works1.png" alt="" style="width: 120px; margin-bottom: 30px;"/>
-          <div class="itemtext1">Stake $ONFI</div>
-          <div class="itemtext2">Receive revenue from interest and flash loan fees</div>
-        </div>
-        <div class="worksitem">
-          <img src="./assets/img/home/works2.png" alt="" style="height: 120px; margin-bottom: 22px;"/>
-          <div class="itemtext1">Access boosted emissions</div>
-          <div class="itemtext2">Locked liquidity activates lending and borrowing RDNT emissions</div>
-        </div>
-        <div class="worksitem">
-          <img src="./assets/img/home/works3.png" alt="" style="width: 120px; margin-bottom: 40px;"/>
-          <div class="itemtext1">Accumulate tokens</div>
-          <div class="itemtext2">Paid in blue chip assets such as BTC, ETH, ORDI, SATS, etc.</div>
-        </div>
-      </div>
-      <div class="workscontent" v-show="worksTab==2">
-        <div class="worksitem">
-          <img src="./assets/img/home/works4.png" alt="" style="width: 120px; margin-bottom: 30px;"/>
-          <div class="itemtext1">Lend collateral</div>
-          <div class="itemtext2">Unlock the full potential of your assets</div>
-        </div>
-        <div class="worksitem">
-          <img src="./assets/img/home/works5.png" alt="" style="height: 120px; margin-bottom: 22px;"/>
-          <div class="itemtext1">Borrow & bridge cross-chain</div>
-          <div class="itemtext2">Use capital on any chain without selling the underlying asset</div>
-        </div>
-        <div class="worksitem">
-          <img src="./assets/img/home/works6.png" alt="" style="width: 120px; margin-bottom: 40px;"/>
-          <div class="itemtext1">Leverage collateral</div>
-          <div class="itemtext2">Automate lend-borrow loops up to 5x to earn higher APRs</div>
-        </div>
-      </div>
-      
-    </div>
-    <div class="ordinbox">
-      <div class="ordintitle">WHY ORDINFINITY</div>
-      <div class="ordincontent">
-        <div class="ordinitem hover-scale">
-          <img src="./assets/img/home/ordin1.png" alt="" style="width: 120px;margin-bottom: 24px;margin-top: 69px;" />
-          <span>Easy and fast BRC20 transactions</span>
-        </div>
-        <div class="ordinitem hover-scale">
-          <img src="./assets/img/home/ordin2.png" alt="" style="width: 120px;margin-bottom: 20px;margin-top: 65px;" />
-          <span>Bringing utility to BRC20, more token rewards system.</span>
-        </div>
-        <div class="ordinitem hover-scale">
-          <img src="./assets/img/home/ordin3.png" alt="" style="height: 95px;margin-bottom: 29px;margin-top: 75px;" />
-          <span>Enables Defi users to seamlessly connect to Ordinals, bringing incremental growth to ordinals</span>
-        </div>
-        <div class="ordinitem hover-scale">
-          <img src="./assets/img/home/ordin4.png" alt="" style="width: 120px;margin-bottom: 24px;margin-top: 69px;" />
-          <span>More decentralized than Ordinals native</span>
-        </div>
-      </div>
-    </div>
-    <div class="footerbox">
-      <img src="./assets/img/header/logo.png" style="height: 32px;" alt="" />
-      <div class="f-right">
-        <div class="f-right-info">
-          <span class="hover-scale">About</span>
-          <span class="hover-scale">Docs</span>
-          <span class="hover-scale">FAQ</span>
-        </div>
-        <div class="f-right-info">
-          <span class="hover-scale">Developers</span>
-          <span class="hover-scale">Github</span>
-        </div>
-        <div class="f-right-info">
-          <span class="hover-scale">Product</span>
-          <span class="hover-scale">Bridge</span>
-          <span class="hover-scale">Swap</span>
-          <span class="hover-scale">Lend</span>
-          <span class="hover-scale">Governance</span>
-        </div>
-      </div>
-    </div>
-    
-  </div>
-</div>
 </template>
 <script>
 export default {
-  name: 'app',
+  name: "app",
   data() {
     return {
       showHeaderbg: false,
-      worksTab: 1
+      worksTab: 1,
     };
   },
   created() {
-    const self= this;
-    window.addEventListener('scroll', function() {
+    const self = this;
+    window.addEventListener("scroll", function () {
       if (window.scrollY > 100) {
         self.showHeaderbg = true; // 改变背景颜色
       } else {
-        self.showHeaderbg = false;  // 恢复初始背景颜色
+        self.showHeaderbg = false; // 恢复初始背景颜色
       }
     });
   },
   methods: {
-    launch(){
+    launch() {
       //this.isLogin = true;
     },
-    connect(){
+    connect() {
       //console.log(11)
     },
-    connect2(){
+    connect2() {
       //console.log(22)
     },
-    init(){
-
+    init() {
       // const firebaseConfig = {
       //   apiKey: "AIzaSyDvR2BOv_7fA5C04o9FuzggleQZIimPYqk",
       //   authDomain: "ordinfinity.firebaseapp.com",
@@ -184,12 +254,9 @@ export default {
       //   appId: "1:555146281830:web:72204b35c530427e873ea7",
       //   measurementId: "G-FLKLX9HEST"
       // };
-
       // // Initialize Firebase
       // const app = initializeApp(firebaseConfig);
       // getAnalytics(app);
-
-
       // if (typeof window.ethereum !== 'undefined') {
       //   console.log('MetaMask is installed!');
       //   this.isMetaMaskInstall = true;
@@ -197,9 +264,9 @@ export default {
       //   console.log('MetaMask is not installed.');
       //   this.isMetaMaskInstall = false;
       // }
-    }
+    },
   },
-}
+};
 </script>
 <style>
 .headerbox {
@@ -217,7 +284,7 @@ export default {
   z-index: 50;
 }
 .headerbg {
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
 }
 .h-logo {
@@ -247,22 +314,22 @@ export default {
 .h-lunchapp {
   width: 200px;
   height: 50px;
-  background: #F7931A;
-  box-shadow: inset 0px -3px 0px 0px rgba(0,0,0,0.6);
+  background: #f7931a;
+  box-shadow: inset 0px -3px 0px 0px rgba(0, 0, 0, 0.6);
   border-radius: 12px 12px 12px 12px;
   line-height: 50px;
   text-align: center;
   font-size: 22px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
 }
 .mintbox {
   position: relative;
 }
 .mintcontentbox {
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   position: absolute;
   left: 0;
   top: 0;
@@ -279,7 +346,7 @@ export default {
   font-size: 72px;
   font-family: Montserrat, Montserrat;
   font-weight: 900;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 88px;
   letter-spacing: 7px;
   margin-bottom: 23px;
@@ -288,28 +355,28 @@ export default {
   font-size: 50px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 300;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 72px;
   text-align: center;
 }
 .mintbtn {
   width: 236px;
   height: 60px;
-  background: #F7931A;
-  box-shadow: inset 0px -3px 0px 0px rgba(0,0,0,0.6);
+  background: #f7931a;
+  box-shadow: inset 0px -3px 0px 0px rgba(0, 0, 0, 0.6);
   border-radius: 316px 316px 316px 316px;
   line-height: 60px;
   text-align: center;
   font-size: 22px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-top: 55px;
 }
 .buildbox {
   width: 100%;
   height: 766px;
-  background: url('./assets/img/home/bg2.png') no-repeat;
+  background: url("./assets/img/home/bg2.png") no-repeat;
   background-size: cover;
   position: relative;
   display: flex;
@@ -322,7 +389,7 @@ export default {
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 700;
   line-height: 125px;
-  background: linear-gradient(90deg, #FF9D01 0%, #FFDBA2 100%);
+  background: linear-gradient(90deg, #ff9d01 0%, #ffdba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 7px;
@@ -331,10 +398,10 @@ export default {
   font-size: 64px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 400;
-  color: rgba(0,0,0,0);
+  color: rgba(0, 0, 0, 0);
   line-height: 93px;
-  -webkit-text-stroke: 1px #FFFFFF;
-  text-stroke: 1px #FFFFFF;
+  -webkit-text-stroke: 1px #ffffff;
+  text-stroke: 1px #ffffff;
 }
 .chainbox {
   margin-top: 55px;
@@ -348,10 +415,10 @@ export default {
   justify-content: center;
   width: 240px;
   height: 60px;
-  background: rgba(247,147,26,0.1);
+  background: rgba(247, 147, 26, 0.1);
   border-radius: 68px 68px 68px 68px;
   opacity: 1;
-  border: 1px solid #F7931A;
+  border: 1px solid #f7931a;
   margin-right: 20px;
   cursor: pointer;
 }
@@ -366,7 +433,7 @@ export default {
   font-size: 20px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 .earnbox {
   width: 100%;
@@ -389,20 +456,20 @@ export default {
   font-size: 100px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 900;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 145px;
 }
 .earntext2 {
   font-size: 50px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 500;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 72px;
 }
 .worksbox {
   width: 100%;
   height: 810px;
-  background: url('./assets/img/home/bg3.png') no-repeat;
+  background: url("./assets/img/home/bg3.png") no-repeat;
   background-color: #171717;
   background-size: cover;
   position: relative;
@@ -415,7 +482,7 @@ export default {
   font-size: 60px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 900;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 87px;
   margin-bottom: 110px;
 }
@@ -435,16 +502,16 @@ export default {
   font-size: 30px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 500;
-  color: #FF8C00;
+  color: #ff8c00;
   line-height: 43px;
   margin-bottom: 20px;
 }
 .itemtext2 {
   width: 322px;
   font-size: 18px;
-  font-family: Alibaba PuHuiTi 2.0, Alibaba PuHuiTi 20;
+  font-family: Alibaba PuHuiTi 2, Alibaba PuHuiTi 20;
   font-weight: 250;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 28px;
   text-align: center;
 }
@@ -463,24 +530,24 @@ export default {
   font-weight: 700;
   text-align: center;
   cursor: pointer;
-  color: #FFFFFF;
-  background: rgba(247,147,26,0.1);
-  border: 1px solid #F7931A;
+  color: #ffffff;
+  background: rgba(247, 147, 26, 0.1);
+  border: 1px solid #f7931a;
 }
 .workbtn:last-child {
   margin-left: 40px;
 }
 .workbtnSelected {
   border: none;
-  background: #F7931A;
-  box-shadow: inset 0px -3px 0px 0px rgba(0,0,0,0.6);
-  color: #FFFFFF;
+  background: #f7931a;
+  box-shadow: inset 0px -3px 0px 0px rgba(0, 0, 0, 0.6);
+  color: #ffffff;
 }
 
 .ordinbox {
   width: 100%;
   height: 750px;
-  background: url('./assets/img/home/bg4.png') no-repeat;
+  background: url("./assets/img/home/bg4.png") no-repeat;
   background-size: cover;
   position: relative;
   display: flex;
@@ -492,7 +559,7 @@ export default {
   font-size: 60px;
   font-family: Source Han Sans, Source Han Sans;
   font-weight: 900;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 87px;
   margin-bottom: 100px;
 }
@@ -519,9 +586,9 @@ export default {
 .ordinitem span {
   width: 294px;
   font-size: 20px;
-  font-family: Alibaba PuHuiTi 2.0, Alibaba PuHuiTi 20;
+  font-family: Alibaba PuHuiTi 2, Alibaba PuHuiTi 20;
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 28px;
   text-align: center;
 }
@@ -529,7 +596,7 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 80px 252px;
-  background: url('./assets/img/home/bg5.png') no-repeat;
+  background: url("./assets/img/home/bg5.png") no-repeat;
   background-size: cover;
   background-color: #171717;
 }
@@ -547,24 +614,24 @@ export default {
 }
 .f-right-info span {
   font-size: 16px;
-  font-family: Alibaba PuHuiTi 2.0, Alibaba PuHuiTi 20;
+  font-family: Alibaba PuHuiTi 2, Alibaba PuHuiTi 20;
   font-weight: 250;
-  color: #E0E0E0;
+  color: #e0e0e0;
   line-height: 38px;
   cursor: pointer;
   text-align: left;
 }
 .f-right-info span:first-child {
   font-size: 20px;
-  font-family: Alibaba PuHuiTi 2.0, Alibaba PuHuiTi 20;
+  font-family: Alibaba PuHuiTi 2, Alibaba PuHuiTi 20;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 30px;
   margin-bottom: 20px;
 }
 .hover-scale:hover {
   transform: scale(1.05);
-  transition: transform 0.3s ease
+  transition: transform 0.3s ease;
 }
 </style>
 
