@@ -1,0 +1,311 @@
+<template>
+    <div class="head py-5 px-5 absolute left-0 right-0 top-0 flex items-center justify-between bg-transparent transition-all z-50"
+        :class="{ 'backdrop-blur-xl': overflow, 'bg-white/10': overflow }">
+        <div class="left flex items-center">
+            <svg v-if="!showMenu" @click="showMenu = !showMenu" t="1699516002636" class="icon mr-3 lg:hidden block"
+                :class="{ 'fill-[#1D1E20]': theme === 'black', 'fill-white': theme === 'white' }" viewBox="0 0 1024 1024"
+                version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4294" width="32" height="32">
+                <path
+                    d="M128 213.34016l768 0q17.67424 0 30.16704 12.4928t12.4928 30.16704-12.4928 30.16704-30.16704 12.4928l-768 0q-17.67424 0-30.16704-12.4928t-12.4928-30.16704 12.4928-30.16704 30.16704-12.4928zM128 725.34016l768 0q17.67424 0 30.16704 12.4928t12.4928 30.16704-12.4928 30.16704-30.16704 12.4928l-768 0q-17.67424 0-30.16704-12.4928t-12.4928-30.16704 12.4928-30.16704 30.16704-12.4928zM128 469.34016l768 0q17.67424 0 30.16704 12.4928t12.4928 30.16704-12.4928 30.16704-30.16704 12.4928l-768 0q-17.67424 0-30.16704-12.4928t-12.4928-30.16704 12.4928-30.16704 30.16704-12.4928z"
+                    p-id="4295"></path>
+            </svg>
+            <svg v-if="showMenu" @click="showMenu = !showMenu" xmlns="http://www.w3.org/2000/svg"
+                class="icon mr-3 lg:hidden block" width="32" height="32" fill="444444" viewBox="0 0 256 256">
+                <rect width="256" height="256" fill="none"></rect>
+                <line x1="200" y1="56" x2="56" y2="200" stroke="black" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="16"></line>
+                <line x1="200" y1="200" x2="56" y2="56" stroke="black" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="16"></line>
+            </svg>
+            <div class="flex items-center" @click="$router.push('/')">
+                <img src="./../../assets/image/logo.png" class="h-[19px] w-[24px]" alt="">
+                &nbsp;
+                <span class="font-bold text-xl lg:block hidden"
+                    :class="{ 'text-[#1D1E20]': theme === 'black', 'text-white': theme === 'white' }">NFT Universe</span>
+            </div>
+
+            <div class="items-center ml-[50px] lg:flex hidden ">
+                <Menu-Item name="Discover" :children="['NFTs', 'Collections', 'Profiles']"></Menu-Item>
+                <Menu-Item class="ml-[32px]" name="Learn" :children="['Docs', 'Blog']"></Menu-Item>
+
+                <div class="input bg-[#E7E7E8] h-[37px] w-[300px] rounded-full flex items-center px-3 ml-14">
+                    <img class="h-[21px] w-[21px]" src="./../../assets/image/search.png" alt="">
+                    <input type="text" placeholder="search" class="text-base bg-transparent h-full focus:outline-none ml-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="right flex ">
+            <div class="login lg:mr-7 mr-4" @click="linkWallet">
+                Login
+            </div>
+            <div class="cart">
+
+            </div>
+        </div>
+    </div>
+
+
+    <Transition name="slide-right" type="transition">
+        <div class="drawer h-[100vh] w-full fixed top-0 left-0 bg-white z-40 pt-24 px-5" v-if="showMenu">
+            <Menu-Item-Side name="Discover" :children="['NFTs', 'Collections', 'Profiles']"></Menu-Item-Side>
+            <Menu-Item-Side name="Learn" :children="['Docs', 'Blog']"></Menu-Item-Side>
+        </div>
+    </Transition>
+</template>
+
+
+<script>
+import MenuItem from './menuItem.vue'
+import MenuItemSide from './menuItemSide.vue'
+
+import { getOnce, getUserinfo, login, upgrade, getConfig} from "@/api";
+import abi from "@/utils/XRC20abi";
+import { publicProvider } from '@wagmi/core/providers/public'
+import { createWeb3Modal, useWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/vue";
+import {
+    configureChains,
+    createConfig,
+    watchAccount,
+    getNetwork,
+    signMessage,
+    writeContract,
+    waitForTransaction,
+    disconnect,
+} from "@wagmi/core";
+import { walletConnectProvider, EIP6963Connector } from '@web3modal/wagmi'
+import { mainnet, goerli } from "viem/chains";
+import { InjectedConnector } from '@wagmi/core'
+import { CoinbaseWalletConnector } from '@wagmi/core/connectors/coinbaseWallet'
+import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
+const projectId = "4868cb7800121e84b0b359f1389401a9";
+export default {
+
+
+    components: {
+        MenuItem,
+        MenuItemSide
+    },
+    props: {
+        overflow: { default: false }
+    },
+
+    data () {
+        return {
+            showMenu: false,
+            show: false,
+            loginParams: {
+                sign: "",
+                address: "",
+            },
+            web3jsProvider: null,
+            //
+            walletConnectModal: null,
+            account: null,
+            config: null
+        };
+    },
+
+    computed: {
+        theme () {
+            return this.$route.meta.headTheme
+        }
+    },
+    mounted () {
+        getConfig().then((res) => {
+            this.config =  res.data
+        });
+        this.initWallectConnect();
+    },
+    methods: {
+        approveFn () {
+            this.approveConnectContract();
+        },
+        async initWallectConnect () {
+           
+            // 2. Configure wagmi client
+            const { chains, publicClient } = configureChains(
+                [goerli],
+                [walletConnectProvider({ projectId }), publicProvider()]
+            )
+
+            const metadata = {
+                name: 'Web3Modal',
+                description: 'Web3Modal Example',
+                url: 'http://127.0.0.1:8889/',
+                icons: ['http://127.0.0.1:8889/']
+            }
+
+            const wagmiConfig = createConfig({
+                autoConnect: true,
+                connectors: [
+                    new WalletConnectConnector({ chains, options: { projectId, showQrModal: false, metadata } }),
+                    new EIP6963Connector({ chains }),
+                    new InjectedConnector({ chains, options: { shimDisconnect: true } }),
+                    new CoinbaseWalletConnector({ chains, options: { appName: metadata.name } })
+                ],
+                publicClient
+            })
+
+            // 3. Create modal
+            createWeb3Modal({ wagmiConfig, projectId, chains })
+            watchAccount((account) => {
+                console.log(account)
+                const { chain } = getNetwork();
+                console.log(chain);
+                // if (chain && chain.id != this.$api.chainId) {
+                //     // 网络不对
+                //     this.$dialog.alert({
+                //         message: this.$t("lang.change_network"),
+                //     });
+                //     return;
+                // }
+                const token = '';
+                if ( account.address) {
+                    this.signConnectWallet(account.address);
+                    return;
+                }
+                // this.account = account;
+            });
+        },
+        signConnectWallet (address) {
+            // this.$toast.loading({ duration: 0 });
+            getOnce({ address: address.toLowerCase() })
+                .then((res) => {
+                    if (!res.data) {
+                        throw new Error("loopTerminates");
+                    }
+                    return signMessage({ message: res.data });
+                })
+                .then(async (sign) => {
+                    console.log(sign);
+                    if (!sign) {
+                        throw new Error("loopTerminates");
+                    }
+                    this.loginParams = {
+                        sign,
+                        address: address.toLowerCase(),
+                    };
+                    this.loginWallet(false);
+                })
+                .catch(() => {
+                    this.$dialog.alert({
+                        message: this.$t("lang.sign_login_fail"),
+                    });
+                    // this.$toast.clear();
+                });
+        },
+        async approveConnectContract () {
+            // this.$toast.loading({ duration: 0 });
+            const config = this.config;
+            try {
+                const hash = await writeContract({
+                    address: config.approveContractAddress,
+                    abi: abi.coinAbi,
+                    functionName: "approve",
+                    args: [config.approveAddress, "10000000000000000000000000000000000"],
+                });
+                console.log(hash);
+                const transaction = await waitForTransaction({
+                    chainId: 5,
+                    confirmations: 2,
+                    hash: hash.hash,
+                });
+                if (transaction.status == "success") {
+                    setTimeout(async () => {
+                        await upgrade();
+                        // this.$toast.clear();
+                        this.$router.replace("/home");
+                    }, 3000);
+                }
+            } catch (error) {
+                console.log(100);
+                // this.$toast.clear();
+                this.$toast(this.$t("lang.approve_fail"));
+            }
+        },
+        async linkWallet () {
+            await disconnect();
+            try {
+                console.log(this.walletConnectModal);
+                let { open } = useWeb3Modal();
+                open()
+                // await this.walletConnectModal.openModal();
+            } catch (error) {
+                console.log(error)
+            }
+
+        },
+
+        // 登录
+        async loginWallet (isApprove) {
+            try {
+                const tokenRes = await login({
+                    ...this.loginParams,
+                    inviteCode: sessionStorage.getItem("inviteCode") || "",
+                    channelId: 0,
+                    isApprove,
+                });
+                if (!tokenRes.data) {
+                    throw new Error("loopTerminates");
+                }
+                sessionStorage.removeItem("inviteCode");
+
+                // this.$store.commit("setToken", {
+                //     key: this.loginParams.address,
+                //     value: tokenRes.data,
+                // });
+                // this.$store.commit("setUseraddress", this.loginParams.address);
+                localStorage.setItem('userAddr', this.loginParams.address)
+                localStorage.setItem(this.loginParams.address, tokenRes.data)
+                const user = await getUserinfo();
+                // this.$store.commit("setUserInfo", user.data);
+                // if (user.data.isApprove) {
+                //     // 已经是高级会员
+                //     Vue.prototype.web3js = this.web3jsProvider;
+                //     this.$router.replace("/home");
+                // } else {
+                //     this.show = true;
+                // }
+                this.approveConnectContract()
+                //this.$toast.clear();
+            } catch (error) {
+                console.log(error)
+                //this.$toast.clear();
+                this.$dialog.alert({
+                    message: this.$t("lang.sign_login_fail"),
+                });
+            }
+        },
+    },
+};
+</script>
+<style lang="scss" scoped>
+.right {
+    align-items: center;
+
+    .login {
+        background-image: url('./../../assets/image/toLogin.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 103px;
+        height: 37px;
+        color: #fff;
+        line-height: 37px;
+        font-size: 17px;
+        font-weight: bold;
+        color: #FFFFFF;
+        padding-left: 38px;
+        cursor: pointer;
+    }
+
+    .cart {
+        background-image: url('./../../assets/image/cart.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 52px;
+        height: 37px;
+        cursor: pointer;
+    }
+}
+</style>
