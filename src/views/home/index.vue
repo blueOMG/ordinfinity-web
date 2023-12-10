@@ -148,7 +148,7 @@
           <span class="text-[1.25rem] leading-[1.88rem] text-white mb-[1.5rem] hover-scale cursor-pointer">Product</span>
           <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Bridge</span>
           <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Swap</span>
-          <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Lend</span>
+          <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale" @click="testgo">Lend</span>
           <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Governance</span>
         </div>
       </div>
@@ -184,13 +184,22 @@ export default {
   data() {
     return {
       
-      worksTab: 1
+      worksTab: 1,
+      test: 0,
     };
   },
   
   unmounted() {
     
   },
+  methods: {
+    testgo() {
+      this.test = this.test + 1;
+      if(this.test > 5) {
+        this.$router.push('/cross/bridge')
+      }
+    }
+  }
   
 };
 </script>
