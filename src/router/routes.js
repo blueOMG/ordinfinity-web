@@ -1,5 +1,5 @@
 import Layout from './../layout/index.vue';
-import EMPTY from './../layout/empty.vue';
+import Cross from './../views/crosschain/index.vue'
 const routes = [
 	{
 		path: '/',
@@ -15,9 +15,18 @@ const routes = [
 				name: '首页',
 				component: () => import('./../views/home/index.vue')
 			},
-
-			
-		
+		]
+	},
+	{
+		path: '/cross',
+		component: Cross,
+		redirect: '/cross/bridge',
+		children: [
+			{
+				path: '/cross/bridge',
+				name: 'bridge',
+				component: () => import('./../views/crosschain/page/bridge/index.vue')
+			},
 		]
 	},
 	

@@ -135,7 +135,9 @@
       <div class="flex">
         <div class="lg:w-[12.5rem] flex flex-col mr-[4rem]">
           <span class="text-[1.25rem] leading-[1.88rem] text-white mb-[1.5rem] hover-scale cursor-pointer">About</span>
-          <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Docs</span>
+          <a href="https://ordinfinity-dao.gitbook.io/ordinfinity/" target="_blank">
+            <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Docs</span>
+          </a>
           <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">FAQ</span>
         </div>
         <div class="lg:w-[12.5rem] flex flex-col mr-[4rem]">
@@ -153,15 +155,21 @@
     </div>
     <!--  -->
     <div class="flex items-center justify-center lg:hidden mb-[3.6rem]">
+      <a href="https://medium.com/@ordinfinity.org" target="_blank">
       <div class=" w-[4.17rem] h-[4.17rem] rounded-full flex items-center justify-center border border-[#3D3D3D] bg-[#171717]">
         <img src="../../assets/img/header/discord.png" alt="" class="w-[2.67rem]"/>
       </div>
+    </a>
+    <a href="https://t.me/ordinfinity" target="_blank">
       <div class=" w-[4.17rem] h-[4.17rem] rounded-full flex items-center justify-center border border-[#3D3D3D] bg-[#171717] mx-[2.5rem]">
         <img src="../../assets/img/header/tg.png" alt="" class="w-[2.17rem]"/>
       </div>
+    </a>
+    <a href="https://twitter.com/ordinfinity" target="_blank">
       <div class=" w-[4.17rem] h-[4.17rem] rounded-full flex items-center justify-center border border-[#3D3D3D] bg-[#171717]">
         <img src="../../assets/img/header/x.png" alt="" class="w-[2rem]"/>
       </div>
+    </a>
     </div>
   </div>
 

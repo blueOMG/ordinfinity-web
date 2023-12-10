@@ -1,15 +1,15 @@
 <template>
- <div class="hidden lg:flex pl-[2.38rem] pr-[1.75rem] py-8 justify-between items-center fixed top-0 left-0 w-full z-50" :class="{'bg-[rgba(0,0,0,0.5)] backdrop-blur-md': overflow}">
+ <div class="hidden lg:flex pl-[2.38rem] pr-[1.75rem] py-8 justify-between items-center fixed top-0 left-0 w-full z-40" :class="{'bg-[rgba(0,0,0,0.5)] backdrop-blur-md': overflow}">
   <img src="../../assets/img/header/logo.png" alt="" class="h-8"/>
   <div class="flex items-center">
-    <img src="../../assets/img/header/discord.png" alt="" class="hover-scale w-[3.13rem] mr-[3.13rem]"/>
-    <img src="../../assets/img/header/tg.png" alt="" class=" mr-[3.13rem] w-8 hover-scale"/>
-    <img src="../../assets/img/header/x.png" alt="" class="h-[1.75rem] mr-[3.13rem] hover-scale"/>
+    <a href="https://medium.com/@ordinfinity.org" target="_blank"><img src="../../assets/img/header/discord.png" alt="" class="hover-scale w-[3.13rem] mr-[3.13rem]"/></a>
+    <a href="https://t.me/ordinfinity" target="_blank"><img src="../../assets/img/header/tg.png" alt="" class=" mr-[3.13rem] w-8 hover-scale"/></a>
+    <a href="https://twitter.com/ordinfinity" target="_blank"><img src="../../assets/img/header/x.png" alt="" class="h-[1.75rem] mr-[3.13rem] hover-scale"/></a>
     <div class="hover-scale w-[12.5rem] h-[3.13rem] rounded-[0.75rem] bg-[#F7931A] text-white text-[1.38rem] flex items-center justify-center">LAUNCH APP</div>
   </div>
  </div>
- <div class="lg:hidden flex items-center justify-between py-8 px-6 fixed top-0 left-0 w-full z-50" :class="{'bg-[rgba(0,0,0,0.5)] backdrop-blur-md': overflow}">
-  <img src="../../assets/img/header/logo2.png" alt="" class="w-[3.83rem]"/>
+ <div class="lg:hidden flex items-center justify-between py-8 px-6 fixed top-0 left-0 w-full z-40" :class="{'bg-[rgba(0,0,0,0.5)] backdrop-blur-md': overflow}">
+  <img src="../../assets/img/header/logo.png" alt="" class="h-[1.5rem]"/>
   <div class="flex items-center">
     <div class="w-40 h-12 bg-[#F7931A] rounded-2xl text-white text-[1.17rem] flex items-center justify-center cursor-pointer hover-scale">LAUNCH APP</div>
     <img src="../../assets/img/header/menu.png" class="w-8 ml-[1.67rem]" alt="" @click="showDraw=true"/>
@@ -44,10 +44,12 @@
       <span class="text-[1.33rem] text-[#999999] font-bold">swap</span>
       <img src="../../assets/img/header/right.png" alt="" class="w-[1rem]"/>
     </div>
-    <div class="flex items-center justify-between w-full h-[5rem] px-[1.67rem] border-b-[2px] border-[#272727]">
-      <span class="text-[1.33rem] text-[#999999] font-bold">Docs</span>
-      <img src="../../assets/img/header/right.png" alt="" class="w-[1rem]"/>
-    </div>
+    <a href="https://ordinfinity-dao.gitbook.io/ordinfinity/" target="_blank">
+      <div class="flex items-center justify-between w-full h-[5rem] px-[1.67rem] border-b-[2px] border-[#272727]">
+        <span class="text-[1.33rem] text-[#999999] font-bold">Docs</span>
+        <img src="../../assets/img/header/right.png" alt="" class="w-[1rem]"/>
+      </div>
+    </a>
     <div class="flex items-center justify-between w-full h-[5rem] px-[1.67rem] border-b-[2px] border-[#272727]">
       <span class="text-[1.33rem] text-[#999999] font-bold">Github</span>
       <img src="../../assets/img/header/right.png" alt="" class="w-[1rem]"/>
@@ -57,9 +59,9 @@
       <img src="../../assets/img/header/right.png" alt="" class="w-[1rem]"/>
     </div>
     <div class=" absolute bottom-0 left-0 w-full h-[7rem] border-t-[2px] border-[#272727] flex items-center px-[1.67rem]">
-      <img src="../../assets/img/header/discord1.png" alt="" class="w-[3.33rem] mr-[3.5rem] hover-scale"/>
-    <img src="../../assets/img/header/tg1.png" alt="" class=" w-[2.67rem] mr-[3.5rem] hover-scale"/>
-    <img src="../../assets/img/header/x1.png" alt="" class="h-[2.17rem]  hover-scale"/>
+      <a href="https://medium.com/@ordinfinity.org" target="_blank"><img src="../../assets/img/header/discord1.png" alt="" class="w-[3.33rem] mr-[3.5rem] hover-scale"/></a>
+      <a href="https://t.me/ordinfinity" target="_blank"><img src="../../assets/img/header/tg1.png" alt="" class=" w-[2.67rem] mr-[3.5rem] hover-scale"/></a>
+        <a href="https://twitter.com/ordinfinity" target="_blank"><img src="../../assets/img/header/x1.png" alt="" class="h-[2.17rem]  hover-scale"/></a>
     </div>
   </div>   
   </el-drawer>                          
