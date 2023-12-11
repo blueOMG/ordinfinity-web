@@ -1,10 +1,11 @@
 <template>
   <div class="cross bg-[#242527]">
     <!-- top -->
-    <div class=" fixed top-0 left-0 w-full h-[4.8rem] items-center justify-end z-40 pr-[1.25rem] hidden lg:flex">
-      <img src="../../assets/img/header/discord.png" alt="" class="hover-scale cursor-pointer w-6 mr-[2.5rem]"/>
-      <img src="../../assets/img/header/tg.png" alt="" class=" mr-[2.5rem] w-6 hover-scale cursor-pointer"/>
-      <img src="../../assets/img/header/x.png" alt="" class="w-5 mr-[2.5rem] hover-scale cursor-pointer"/>
+    <div class=" fixed top-0 left-0 w-full h-[4.8rem] items-center justify-end z-40 pr-[2.25rem] hidden lg:flex" :class="{'bg-[rgba(0,0,0,0.5)] backdrop-blur-md': overflow}">
+      <a href="https://medium.com/@ordinfinity.org" target="_blank"><img src="../../assets/img/header/discord.png" alt="" class="hover-scale cursor-pointer w-6 mr-[2.5rem]"/></a>
+      <a href="https://t.me/ordinfinity" target="_blank"><img src="../../assets/img/header/tg.png" alt="" class=" mr-[2.5rem] w-6 hover-scale cursor-pointer"/></a>
+      <a href="https://twitter.com/ordinfinity" target="_blank"><img src="../../assets/img/header/x.png" alt="" class="w-5 mr-[2.5rem] hover-scale cursor-pointer"/></a>
+      <a href="https://discord.gg/XAWvpdpw" target="_blank"><img src="../../assets/img/header/disc.png" alt="" class="w-6 mr-[2.5rem] hover-scale"/></a>
       <div
         class="hover-scale cursor-pointer w-[11rem] h-[2.75rem] rounded-[0.75rem] bg-[rgba(247,147,26,0.1)] border border-[#F7931A] text-white text-[1rem] flex items-center justify-center px-[0.6rem]"
         v-if="$store.state.userAddress"
@@ -42,14 +43,14 @@
     <!-- phone -->
 
     <div class="lg:hidden flex items-center justify-between py-8 px-6 fixed top-0 left-0 w-full z-40" :class="{'bg-[rgba(0,0,0,0.5)] backdrop-blur-md': overflow}">
-      <img src="../../assets/img/header/logo2.png" alt="" class="h-[4rem]"/>
+      <img src="../../assets/img/header/logo2.png" alt="" class="h-[4rem]" @click="$router.replace('/app/home')"/>
       <div class="flex items-center">
-        <div class="w-40 h-12 bg-[#F7931A] rounded-2xl text-white text-[1.17rem] flex items-center justify-center cursor-pointer hover-scale">LAUNCH APP</div>
+        <div class="w-40 h-12 border border-[#F7931A] bg-[rgba(247,147,26,0.1)] rounded-2xl text-white text-[1.17rem] flex items-center justify-center cursor-pointer hover-scale">Connect Wallet</div>
         <img src="../../assets/img/header/menu.png" class="w-8 ml-[1.67rem]" alt="" @click="showDraw=true"/>
       </div>
     </div>  
     <!-- content -->
-    <div class="w-[100vw] h-[100vh] lg:pl-[17.5rem] overflow-y-auto">
+    <div class="main h-[100vh] lg:pl-[17.5rem] overflow-auto" ref="crossbody">
       <router-view ></router-view>
     </div>
   </div>
@@ -94,8 +95,14 @@ export default {
   data() {
     return {
       routeTab: 1,
-      showDraw: false, 
+      showDraw: false,
+      overflow: false,
     }
+  },
+  mounted() {
+    this.$refs.crossbody.addEventListener("scroll", (e) => {
+      this.overflow = e.srcElement.scrollTop > 70;
+    });
   },
   methods: {
     selectRoute(val) {

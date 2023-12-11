@@ -5,13 +5,14 @@
     <a href="https://medium.com/@ordinfinity.org" target="_blank"><img src="../../assets/img/header/discord.png" alt="" class="hover-scale w-[3.13rem] mr-[3.13rem]"/></a>
     <a href="https://t.me/ordinfinity" target="_blank"><img src="../../assets/img/header/tg.png" alt="" class=" mr-[3.13rem] w-8 hover-scale"/></a>
     <a href="https://twitter.com/ordinfinity" target="_blank"><img src="../../assets/img/header/x.png" alt="" class="h-[1.75rem] mr-[3.13rem] hover-scale"/></a>
-    <div class="hover-scale w-[12.5rem] h-[3.13rem] rounded-[0.75rem] bg-[#F7931A] text-white text-[1.38rem] flex items-center justify-center">LAUNCH APP</div>
+    <a href="https://discord.gg/XAWvpdpw" target="_blank"><img src="../../assets/img/header/disc.png" alt="" class="h-[1.75rem] mr-[3.13rem] hover-scale"/></a>
+    <div class="hover-scale w-[12.5rem] h-[3.13rem] rounded-[0.75rem] bg-[#F7931A] text-white text-[1.38rem] flex items-center justify-center" @click="$router.push('/cross/bridge')">LAUNCH APP</div>
   </div>
  </div>
  <div class="lg:hidden flex items-center justify-between py-8 px-6 fixed top-0 left-0 w-full z-40" :class="{'bg-[rgba(0,0,0,0.5)] backdrop-blur-md': overflow}">
   <img src="../../assets/img/header/logo.png" alt="" class="h-[1.5rem]"/>
   <div class="flex items-center">
-    <div class="w-40 h-12 bg-[#F7931A] rounded-2xl text-white text-[1.17rem] flex items-center justify-center cursor-pointer hover-scale">LAUNCH APP</div>
+    <div class="w-40 h-12 bg-[#F7931A] rounded-2xl text-white text-[1.17rem] flex items-center justify-center cursor-pointer hover-scale" @click="$router.push('/cross/bridge')">LAUNCH APP</div>
     <img src="../../assets/img/header/menu.png" class="w-8 ml-[1.67rem]" alt="" @click="showDraw=true"/>
   </div>
  </div>                                                                                   
@@ -28,7 +29,7 @@
       <img src="../../assets/img/header/logo3.png" alt="" class="h-[2.25rem]"/>
       <img src="../../assets/img/header/close.png" alt="" class="w-[1.67rem]" @click="showDraw=false"/>
     </div>
-    <div class="flex items-center justify-between w-full h-[5rem] px-[1.67rem] border-b-[2px] border-[#272727]">
+    <div class="flex items-center justify-between w-full h-[5rem] px-[1.67rem] border-b-[2px] border-[#272727]" @click="$router.push('/cross/bridge')">
       <span class="text-[1.33rem] text-[#999999] font-bold">Bridge</span>
       <img src="../../assets/img/header/right.png" alt="" class="w-[1rem]"/>
     </div>

@@ -146,9 +146,9 @@
         </div>
         <div class="lg:w-[12.5rem] flex flex-col">
           <span class="text-[1.25rem] leading-[1.88rem] text-white mb-[1.5rem] hover-scale cursor-pointer">Product</span>
-          <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Bridge</span>
+          <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale" @click="$router.push('/cross/bridge')">Bridge</span>
           <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Swap</span>
-          <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale" @click="testgo">Lend</span>
+          <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Lend</span>
           <span class=" text-[#F2F2F2] text-base leading-[2.8rem] font-[250] cursor-pointer hover-scale">Governance</span>
         </div>
       </div>
@@ -166,8 +166,13 @@
       </div>
     </a>
     <a href="https://twitter.com/ordinfinity" target="_blank">
-      <div class=" w-[4.17rem] h-[4.17rem] rounded-full flex items-center justify-center border border-[#3D3D3D] bg-[#171717]">
+      <div class=" w-[4.17rem] h-[4.17rem] rounded-full flex items-center justify-center border border-[#3D3D3D] bg-[#171717] mr-[2.5rem]">
         <img src="../../assets/img/header/x.png" alt="" class="w-[2rem]"/>
+      </div>
+    </a>
+    <a href="https://discord.gg/XAWvpdpw" target="_blank">
+      <div class=" w-[4.17rem] h-[4.17rem] rounded-full flex items-center justify-center border border-[#3D3D3D] bg-[#171717]">
+        <img src="../../assets/img/header/disc.png" alt="" class="w-[2rem]"/>
       </div>
     </a>
     </div>
@@ -193,12 +198,7 @@ export default {
     
   },
   methods: {
-    testgo() {
-      this.test = this.test + 1;
-      if(this.test > 5) {
-        this.$router.push('/cross/bridge')
-      }
-    }
+  
   }
   
 };

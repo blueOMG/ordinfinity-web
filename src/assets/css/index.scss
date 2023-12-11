@@ -56,3 +56,10 @@ div,a,img {
   transform: scale(1.05);
   transition: transform 0.3s ease
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
