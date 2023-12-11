@@ -7,11 +7,51 @@
   <link rel="apple-touch-icon" href="/192.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ordin finity</title>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(registration => {
+        registration.unregister();
+      });
+    }
+    const getFontSize = (doc, win) => {
+      let baseFS;
+      const clientWidth = win.innerWidth;
+      if (clientWidth >= 1000) {
+        baseFS = 16;
+      } else if (720 >= clientWidth) {
+        baseFS = 12;
+      }
+      doc.querySelector('html').style.fontSize = baseFS + 'px';
+    };
 
+    ((doc, win) => {
+      getFontSize(doc, win);
+      win.onresize = () => getFontSize(doc, win);
+    })(document, window);
+
+  </script>
+
+  <script type='text/javascript'>
+    (function (a, b, c, d, e, j, s) {
+      a[d] = a[d] || function () {
+        (a[d].a = a[d].a || []).push(arguments)
+      };
+      j = b.createElement(c),
+        s = b.getElementsByTagName(c)[0];
+      j.async = true;
+      j.charset = 'UTF-8';
+      j.src = 'https://nft-uni.com/loader.js';
+      s.parentNode.insertBefore(j, s);
+    })(window, document, 'script', '_MEIQIA');
+    _MEIQIA('entId', '2639c72f41f759e7eefa42a575cda182');
+    _MEIQIA('withoutBtn');
+  </script>
+  <script type="module" crossorigin src="/assets/index-8b234066.js"></script>
+  <link rel="stylesheet" href="/assets/index-53df4a9c.css">
 </head>
 
 <body>
-  <div> 测试</div>
+  <div id="app"></div>
   
 </body>
 
