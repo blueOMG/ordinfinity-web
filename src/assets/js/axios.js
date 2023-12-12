@@ -94,6 +94,7 @@ export function get(url, params = {}) {
  */
 
 export function post(url, data = {}) {
+  console.log(API.apiUrl ,url)
   return new Promise((resolve, reject) => {
     axios.post(API.apiUrl + url, data)
       .then(response => {

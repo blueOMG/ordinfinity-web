@@ -27,8 +27,8 @@ let config = {
     port: 8889,
     open: true,
     proxy: {
-      "/api": {
-        target: 'https://nft-uniapp.com',//代理地址 凡是使用/api
+      "/create": {
+        target: 'https://testapi.ordinfinity.org',//代理地址 凡是使用/api
         changeOrigin: true,
         pathRewrite: {
         }

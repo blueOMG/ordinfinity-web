@@ -7,14 +7,15 @@
       <a href="https://twitter.com/ordinfinity" target="_blank"><img src="../../assets/img/header/x.png" alt="" class="w-5 mr-[2.5rem] hover-scale cursor-pointer"/></a>
       <a href="https://discord.gg/XAWvpdpw" target="_blank"><img src="../../assets/img/header/disc.png" alt="" class="w-6 mr-[2.5rem] hover-scale"/></a>
       <div
-        class="hover-scale cursor-pointer w-[11rem] h-[2.75rem] rounded-[0.75rem] bg-[rgba(247,147,26,0.1)] border border-[#F7931A] text-white text-[1rem] flex items-center justify-center px-[0.6rem]"
+        class="hover-scale cursor-pointer px-8 h-[2.75rem] rounded-[0.75rem] bg-[rgba(247,147,26,0.1)] border border-[#F7931A] text-white text-[1rem] flex items-center justify-center"
         v-if="$store.state.userAddress"
+        @click="showInfo=true"
       >
-        <img src="../../assets/img/home/btc.png" alt="" class="w-[1.5rem] h-[1.5rem]" />
-        <span class=" flex-1">BITCOIN</span>
-        <img src="../../assets/img/cross/arrow_down.png" alt=""  class="w-4" />
+        <!-- <img src="../../assets/img/home/btc.png" alt="" class="w-[1.5rem] h-[1.5rem]" /> -->
+        <span class=" flex-1 text-center">{{ $store.state.userAddress.slice(0,6)+'...'+$store.state.userAddress.slice(-4) }}</span>
+        <!-- <img src="../../assets/img/cross/arrow_down.png" alt=""  class="w-4" /> -->
       </div>
-      <div v-else class="hover-scale cursor-pointer w-[11rem] h-[2.75rem] rounded-[0.75rem] bg-[rgba(247,147,26,0.1)] border border-[#F7931A] text-white text-[1rem] flex items-center justify-center">
+      <div @click="showlink=true" v-else class="hover-scale cursor-pointer w-[11rem] h-[2.75rem] rounded-[0.75rem] bg-[rgba(247,147,26,0.1)] border border-[#F7931A] text-white text-[1rem] flex items-center justify-center">
         Connect Wallet
       </div>
     </div>
@@ -45,7 +46,8 @@
     <div class="lg:hidden flex items-center justify-between py-8 px-6 fixed top-0 left-0 w-full z-40" :class="{'bg-[rgba(0,0,0,0.5)] backdrop-blur-md': overflow}">
       <img src="../../assets/img/header/logo2.png" alt="" class="h-[4rem]" @click="$router.replace('/app/home')"/>
       <div class="flex items-center">
-        <div class="w-40 h-12 border border-[#F7931A] bg-[rgba(247,147,26,0.1)] rounded-2xl text-white text-[1.17rem] flex items-center justify-center cursor-pointer hover-scale">Connect Wallet</div>
+        <div v-if="$store.state.userAddress" class="w-40 h-12 border border-[#F7931A] bg-[rgba(247,147,26,0.1)] rounded-2xl text-white text-[1.17rem] flex items-center justify-center cursor-pointer hover-scale"  @click="showInfo=true">{{ $store.state.userAddress.slice(0,6)+'...'+$store.state.userAddress.slice(-4) }}</div>
+        <div v-else class="w-40 h-12 border border-[#F7931A] bg-[rgba(247,147,26,0.1)] rounded-2xl text-white text-[1.17rem] flex items-center justify-center cursor-pointer hover-scale"  @click="showlink=true">Connect Wallet</div>
         <img src="../../assets/img/header/menu.png" class="w-8 ml-[1.67rem]" alt="" @click="showDraw=true"/>
       </div>
     </div>  
@@ -88,28 +90,104 @@
     </div>
   </div>   
   </el-drawer> 
+  <el-dialog
+      v-model="showlink"
+      :show-close="false"
+      custom-class="walletdialog"
+      :close-on-click-modal="false"
+    >
+      <linkwallet @close="showlink=false" ref="linkwalletRef"/>
+    </el-dialog>
+  <el-dialog
+    v-model="showInfo"
+    :show-close="false"
+    custom-class="walletdialog"
+    :close-on-click-modal="false"
+  >
+    <walletinfo @close="showInfo=false"/>
+  </el-dialog>
 </template>
 
 <script>
+import linkwallet from './dialog/linkWallet.vue'
+import walletinfo from './dialog/walletinfo.vue'
+import utils from '../../utils/utils'
 export default {
+  components: {
+    linkwallet,
+    walletinfo
+  },
   data() {
     return {
       routeTab: 1,
       showDraw: false,
       overflow: false,
+      //
+      showlink: false,
+      showInfo: false,
     }
   },
   mounted() {
     this.$refs.crossbody.addEventListener("scroll", (e) => {
       this.overflow = e.srcElement.scrollTop > 70;
     });
+    const type = localStorage.getItem('WALLETTYPE');
+    if(type) {
+      this.link(type)
+    }
   },
   methods: {
+    link(type) {
+      if(type=='sat') {
+        this.linkSat()
+      } else {
+        this.linkOkx()
+      }
+    },
+    async linkSat() {
+      if (typeof window.unisat !== 'undefined') {
+        return 
+      }
+      try {
+        let accounts = await window.unisat.requestAccounts();
+        localStorage.setItem('WALLETTYPE','sat');
+        this.$store.commit('setUseraddress',accounts[0]);
+        utils.accountChange();
+      } catch (e) {
+        console.log('connect failed');
+      }
+    },
+    async linkOkx() {
+      if(!window.okxwallet) {
+        return 
+      }
+      try {
+        const accounts = await okxwallet.request({ method: 'eth_requestAccounts' });
+        console.log(accounts)
+        localStorage.setItem('WALLETTYPE','okx');
+        this.$store.commit('setUseraddress',accounts[0]);
+        utils.accountChange();
+      } catch (error) {
+        
+      }
+    },
     selectRoute(val) {
       this.routeTab = val;
     }
   }
 }
 </script>
-<style scoped>
+<style lang="scss">
+.walletdialog {
+  background: transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .el-dialog__header {
+    display: none !important;
+  }
+  .el-dialog__body {
+    background: transparent !important;
+  }
+}
 </style>

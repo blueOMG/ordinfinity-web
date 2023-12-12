@@ -27,6 +27,11 @@ const routes = [
 				name: 'bridge',
 				component: () => import('./../views/crosschain/page/bridge/index.vue')
 			},
+			{
+				path: '/cross/borrow',
+				name: 'borrow',
+				component: () => import('./../views/crosschain/page/borrow/index.vue')
+			},
 		]
 	},
 	

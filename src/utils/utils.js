@@ -137,6 +137,15 @@ const utils = {
     document.execCommand("Copy"); //原生copy方法执行浏览器复制命令
     document.getElementById('copyInput').remove(); // 为避免下次页面添加copy方法 所以这里copy完之后要移除input实体
   },
+  accountChange() {
+    const type = localStorage.getItem('WALLETTYPE');
+    if(type=='okx') {
+      okxwallet.on('accountsChanged', ()=>{window.location.reload();});
+    } else {
+      unisat.on('accountsChanged', ()=>{window.location.reload();});
+    }
+    
+  },
   // 截断保留2位
   fixedNumber2(num) {
     let res = num + '';

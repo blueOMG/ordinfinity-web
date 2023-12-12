@@ -70,32 +70,9 @@
 
 
 <script>
-import { publicProvider } from "@wagmi/core/providers/public";
-import {
-  createWeb3Modal,
-  useWeb3Modal,
-  defaultWagmiConfig,
-} from "@web3modal/wagmi/vue";
-import {
-  configureChains,
-  createConfig,
-  watchAccount,
-  getNetwork,
-  signMessage,
-  writeContract,
-  waitForTransaction,
-  disconnect,
-  InjectedConnector,
-  fetchBalance,
-  readContract,
-} from "@wagmi/core";
-import { walletConnectProvider, EIP6963Connector } from "@web3modal/wagmi";
-import { mainnet, goerli } from "viem/chains";
-import { CoinbaseWalletConnector } from "@wagmi/core/connectors/coinbaseWallet";
-import { WalletConnectConnector } from "@wagmi/core/connectors/walletConnect";
+
 import { showLoadingToast, closeToast } from "vant";
 
-const projectId = "4868cb7800121e84b0b359f1389401a9";
 export default {
   components: {
     

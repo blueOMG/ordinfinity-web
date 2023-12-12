@@ -6,11 +6,11 @@
           Bridge
         </div>
         <div class="py-[2.5rem] px-[1.25rem] lg:p-[1.8rem]">
-          <div class="flex items-center mb-5">
+          <div class="flex items-center mb-5" @click="showChooseToken=true">
             <span class="text-[#59595A] text-[1.17rem] lg:text-[0.88rem] mr-[0.63rem]">Token</span>
             <div class="px-[1.25rem] lg:px-[0.8rem] py-[0.5rem] flex items-center border border-[#272727] rounded-[1rem] lg:rounded-[0.75rem] cursor-pointer">
-              <img src="../../../../assets/img/home/btc.png" alt="" class="w-[2rem] lg:w-[1.5rem]" />
-              <span class="text-[1.33rem] lg:text-[1rem] text-[white] font-bold ml-[0.6rem] mr-[0.8rem]">ORDI</span>
+              <img :src="tokenData.icon" alt="" class="w-[2rem] lg:w-[1.5rem]" />
+              <span class="text-[1.33rem] lg:text-[1rem] text-[white] font-bold ml-[0.6rem] mr-[0.8rem]">{{ tokenData.name }}</span>
               <img src="../../../../assets/img/cross/arrow_down.png" alt="" class="w-[1rem]" />
             </div>
           </div>
@@ -21,27 +21,24 @@
           >
             <div class="flex justify-between items-center text-[#59595A] text-[1.17rem] lg:text-[0.88rem] mb-[1rem]">
               <span>From</span>
-              <span>Balance: {{ 4545.015 }}</span>
+              <span>Balance: {{ '0.00' }}</span>
             </div>
             <div class="flex items-center" @click.stop="openSelect1=!openSelect1">
-              <img src="../../../../assets/img/home/btc.png" alt="" class="w-[2rem] lg:w-[1.5rem]" />
-              <span class="text-[1.33rem] lg:text-[1rem] text-[white] font-bold ml-[0.6rem] mr-[0.8rem] flex-1 text-left">ORDI</span>
+              <img :src="chain1Data.icon" alt="" class="w-[2rem] lg:w-[1.5rem]" />
+              <span class="text-[1.33rem] lg:text-[1rem] text-[white] font-bold ml-[0.6rem] mr-[0.8rem] flex-1 text-left">{{ chain1Data.name }}</span>
               <img src="../../../../assets/img/cross/arrow_down.png" alt="" class="w-[1rem]" />
             </div>
             <!-- select content -->
-            <Transition name="fade">
               <div
                 v-show="openSelect1" 
-                class=" z-[10] absolute left-0 bottom-[-200px] w-full h-[200px] border border-[#F7931A] rounded-[1.33rem] bg-[#17181A] px-[1.25rem] py-[1rem] opacity-100">
-                <el-scrollbar height="200px">
-                  <div class="w-full flex items-center mb-5" v-for="item in 10">
-                    <img src="../../../../assets/img/home/eth.png" class="w-8 mr-[0.83rem]" alt="" />
-                    <span class="text-white text-[1.13rem] font-bold">ETH</span>
+                class=" z-[10] absolute left-0 bottom-[-120px] w-full h-[120px] border border-[#F7931A] rounded-[1.33rem] bg-[#17181A] px-[1.25rem] py-[1rem] opacity-100">
+                <el-scrollbar height="120px">
+                  <div class="w-full flex items-center mb-5" v-for="item in chainList" @click="selectedChain1(item)">
+                    <img :src="item.icon" class="w-8 mr-[0.83rem]" alt="" />
+                    <span class="text-white text-[1.13rem] font-bold">{{ item.name }}</span>
                   </div>
-                  
                 </el-scrollbar>
               </div>
-            </Transition>
           </div>
           <div class="w-[2.5rem] lg:w-[1.9rem]  mx-auto my-[1.67rem] lg:my-[1.25rem]">
             <img src="../../../../assets/img/cross/transfer.png" class="w-full" alt="">
@@ -56,24 +53,23 @@
               <span></span>
             </div>
             <div class="flex items-center" @click.stop="openSelect2=!openSelect2">
-              <img src="../../../../assets/img/home/btc.png" alt="" class="w-[2rem] lg:w-[1.5rem]" />
-              <span class="text-[1.33rem] lg:text-[1rem] text-[white] font-bold ml-[0.6rem] mr-[0.8rem] flex-1 text-left">ORDI</span>
+              <img :src="chain2Data.icon" alt="" class="w-[2rem] lg:w-[1.5rem]" />
+              <span class="text-[1.33rem] lg:text-[1rem] text-[white] font-bold ml-[0.6rem] mr-[0.8rem] flex-1 text-left">{{ chain2Data.name }}</span>
               <img src="../../../../assets/img/cross/arrow_down.png" alt="" class="w-[1rem]" />
             </div>
             <!-- select content -->
-            <Transition name="fade">
+            
               <div
                 v-show="openSelect2" 
-                class=" z-[10] absolute left-0 bottom-[-200px] w-full h-[200px] border border-[#F7931A] rounded-[1.33rem] bg-[#17181A] px-[1.25rem] py-[1rem] opacity-100">
-                <el-scrollbar height="200px">
-                  <div class="w-full flex items-center mb-5" v-for="item in 10">
-                    <img src="../../../../assets/img/home/eth.png" class="w-8 mr-[0.83rem]" alt="" />
-                    <span class="text-white text-[1.13rem] font-bold">ETH</span>
+                class=" z-[10] absolute left-0 bottom-[-120px] w-full h-[120px] border border-[#F7931A] rounded-[1.33rem] bg-[#17181A] px-[1.25rem] py-[1rem] opacity-100">
+                <el-scrollbar height="120px">
+                  <div class="w-full flex items-center mb-5" v-for="item in chainList" @click="selectedChain2(item)">
+                    <img :src="item.icon" class="w-8 mr-[0.83rem]" alt="" />
+                    <span class="text-white text-[1.13rem] font-bold">{{ item.name }}</span>
                   </div>
                   
                 </el-scrollbar>
               </div>
-            </Transition>
           </div>
           <!-- input -->
           <div class="w-full h-[4.17rem] lg:h-[3.13rem] flex items-center border border-[#272727] rounded-[1rem] px-[1.25rem] lg:px-[0.94rem] mt-[1.67rem] lg:mt-[1.25rem]">
@@ -82,7 +78,7 @@
           </div>
           <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between text-[1.17rem] lg:text-[0.88rem] mt-[0.83rem] lg:mt-[0.66rem] text-[#59595A]">
             <span>Service fees: <span class="text-white">100</span></span>
-            <span>Balance: <span class="text-white">100</span></span>
+            <span>Balance: <span class="text-white">{{ '0.00' }}</span></span>
           </div>
           <div class="w-full flex items-center h-[4.17rem] lg:h-[3.13rem] border border-[#272727] rounded-[1rem] px-[1.25rem] lg:px-[0.94rem] mt-[1.67rem] lg:mt-[1.25rem]">
             <input type="text" class="w-full text-[1.33rem] lg:text-[1rem] text-white bg-transparent outline-none border-none" placeholder="Enter BRC-20 Recipient Address" />
@@ -173,26 +169,75 @@
         </div>
       </div>
     </div>
+    <!-- chooseToken -->
+    <el-dialog
+      v-model="showChooseToken"
+      :show-close="false"
+      custom-class="choosetokendialog"
+      :close-on-click-modal="false"
+    >
+      <choosetoken @close="showChooseToken=false" :tokenName="tokenData.name" @choose="selected"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import choosetoken from '../../dialog/choosetoken.vue';
+import btcimg from '../../../../assets/img/home/btc.png';
+import ethimg from '../../../../assets/img/home/eth.png';
+import ORDIimg from '../../../../assets/img/token/ORDI.png';
 export default {
+  components: {
+    choosetoken
+  },
   data() {
     return {
       openSelect1: false,
-      openSelect2: false
+      openSelect2: false,
+      showChooseToken: false,
+      tokenData: {
+        icon: ORDIimg,
+        name: 'ORDI'
+      },
+      chainList:[
+        {icon:btcimg,name:'Bitcoin'},
+        {icon:ethimg,name:'Ethereum'},
+      ],
+      chain1Data:{icon:btcimg,name:'Bitcoin'},
+      chain2Data:{icon:ethimg,name:'Ethereum'},
     }
   },
+
   methods: {
     closeSelect() {
       this.openSelect1 = false;
       this.openSelect2 = false;
+    },
+    selected(item) {
+      console.log(item)
+      this.tokenData = item;
+    },
+    selectedChain1(item) {
+      this.chain1Data = item;
+      if(item.name=='Ethereum') {
+        this.chain2Data = {icon:btcimg,name:'Bitcoin'};
+      } else {
+        this.chain2Data = {icon:ethimg,name:'Ethereum'};
+      }
+      
+    },
+    selectedChain2(item) {
+      this.chain2Data = item;
+      if(item.name=='Ethereum') {
+        this.chain1Data = {icon:btcimg,name:'Bitcoin'};
+      } else {
+        this.chain1Data = {icon:ethimg,name:'Ethereum'};
+      }
     }
   }
 }
 </script>
-<style>
+<style lang="scss">
 .content {
   /* 设置默认高度为0，实现初始时的折叠效果 */
   height: 0;
@@ -207,5 +252,17 @@ export default {
 .content-enter, .content-leave-to {
   /* 进入和离开时的高度 */
   height: 0;
+}
+.choosetokendialog {
+  background: transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .el-dialog__header {
+    display: none !important;
+  }
+  .el-dialog__body {
+    background: transparent !important;
+  }
 }
 </style>

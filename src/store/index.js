@@ -1,6 +1,5 @@
 import { createStore } from 'vuex';
 
-import { readContract } from '@wagmi/core';
 import abi from "@/assets/js/XRC20abi";
 import Utils from '@/utils/utils'
 const state = {
@@ -43,16 +42,7 @@ const store = createStore({
     }
   },
   actions: {
-    async updateBalance(context) {
-      const res = await readContract({
-        address: context.state.config.approveContractAddress,
-        abi: abi.coinAbi,
-        functionName: "balanceOf",
-        args: [context.state.userAddress],
-      });
-      context.commit('setBalance', Utils.mathpow(res, 6))
-      return context.state.usdtBalance
-    }
+    
   }
 });
 export default store;
