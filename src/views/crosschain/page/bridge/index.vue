@@ -161,7 +161,7 @@
           <div
             class="flex flex-col lg:flex-row items-start lg:items-center justify-between text-[1.17rem] lg:text-[0.88rem] mt-[0.83rem] lg:mt-[0.66rem] text-[#59595A]"
           >
-            <span>Service fees: <span class="text-white">100</span></span>
+            <span>Service fees: <span class="text-white">{{ "0.00" }}</span></span>
             <span
               >Balance: <span class="text-white">{{ "0.00" }}</span></span
             >
@@ -178,7 +178,7 @@
           <div
             class="flex items-center justify-between text-[1.17rem] lg:text-[0.88rem] mt-[0.83rem] lg:mt-[0.66rem] text-[#59595A]"
           >
-            <span>You will receive: <span class="text-white">100</span></span>
+            <span>You will receive: <span class="text-white">{{ "0.00" }}</span></span>
             <span></span>
           </div>
           <div

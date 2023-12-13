@@ -27,7 +27,7 @@
         />
         <span
           class="mt-[0.33rem] text-white text-[1.2rem] font-bold lg:text-[1rem]"
-          >UniSat Wallet</span
+          >Unisat Wallet</span
         >
       </div>
       <div
@@ -41,7 +41,7 @@
         />
         <span
           class="mt-[0.33rem] text-white text-[1.2rem] font-bold lg:text-[1rem]"
-          >Xverse Wallet</span
+          >OKX Wallet</span
         >
       </div>
     </div>
