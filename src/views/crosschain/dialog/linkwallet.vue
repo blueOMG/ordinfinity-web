@@ -50,6 +50,7 @@
 
 <script>
 import utils from "../../../utils/utils";
+import { getTokensBalance } from './../../../api/api'
 export default {
   data() {
     return {};
@@ -73,6 +74,7 @@ export default {
         localStorage.setItem("WALLETTYPE", "sat");
         this.$store.commit("setUseraddress", accounts[0]);
         this.$emit("close");
+        // this.getBalance(accounts[0]);
         utils.accountChange();
       } catch (e) {
         console.log("connect failed");
@@ -91,8 +93,14 @@ export default {
         localStorage.setItem("WALLETTYPE", "okx");
         this.$store.commit("setUseraddress", accounts[0]);
         this.$emit("close");
+        // this.getBalance(accounts[0]);
         utils.accountChange();
       } catch (error) {}
+    },
+    async getBalance(address) {
+      const res = getTokensBalance({address,token: 'ordi,rats,sats,onfi' });
+      console.log(res)
+      this.$store.commit()
     },
   },
 };

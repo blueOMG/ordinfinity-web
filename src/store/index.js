@@ -2,16 +2,10 @@ import { createStore } from 'vuex';
 
 import abi from "@/assets/js/XRC20abi";
 import Utils from '@/utils/utils'
+import {getTokensBalance} from './../api/api'
 const state = {
   userAddress: '',
-  config: {},
-  userInfo: {},
-  langList: [],
   usdtBalance: 0,
-  tokenInfo: {
-
-  },
-  headerSearch: null
 };
 
 const store = createStore({
@@ -19,30 +13,20 @@ const store = createStore({
   mutations: {
     setUseraddress(state, data) {
       state.userAddress = data
-    },
-    setConfig(state, data) {
-      state.config = data
-    },
-    setUserInfo(state, data) {
-      state.userInfo = data
-    },
-    setLangList(state, data) {
-      state.langList = data
+      store.dispatch('getBalance',data);
     },
     setBalance(state, data) {
       state.usdtBalance = data
     },
 
-    setToken(state, data) {
-      state.tokenInfo[data.key] = data.value
-    },
-    setHeaderSearch(state, data) {
-      console.log(222333);
-      state.headerSearch = data
-    }
   },
   actions: {
-    
+    async getBalance(context,address) {
+      console.log(state)
+      const res = getTokensBalance({address,token: 'ordi,rats,sats,onfi' });
+      console.log(res)
+      context.commit('setBalance',res.data)
+    },
   }
 });
 export default store;

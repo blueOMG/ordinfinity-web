@@ -172,7 +172,7 @@
             <input
               type="text"
               class="w-full text-[1.33rem] lg:text-[1rem] text-white bg-transparent outline-none border-none"
-              placeholder="Enter BRC-20 Recipient Address"
+              :placeholder="`Enter ${chain1Data.name=='Bitcoin' ? 'BRC-20' : 'ERC-20'} Recipient Address`"
             />
           </div>
           <div

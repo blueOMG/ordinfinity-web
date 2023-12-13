@@ -26,14 +26,14 @@ let config = {
   server: {
     port: 8889,
     open: true,
-    proxy: {
-      "/create": {
-        target: 'https://testapi.ordinfinity.org',//代理地址 凡是使用/api
-        changeOrigin: true,
-        pathRewrite: {
-        }
-      }
-    }
+    // proxy: {
+    //   "": {
+    //     target: 'https://testapi.ordinfinity.org',//代理地址 凡是使用/api
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //     }
+    //   }
+    // }
 
 
   },

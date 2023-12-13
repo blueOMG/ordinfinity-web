@@ -4,7 +4,7 @@ let data = {
   // chain id
   chainId: 1, // 测试网 97  主网 56,
   // api url
-  apiUrl: process.env.NODE_ENV === 'production' ? 'https://testapi.ordinfinity.org/' : '/create',
+  apiUrl: process.env.NODE_ENV === 'production' ? 'https://testapi.ordinfinity.org' : 'https://testapi.ordinfinity.org',
   langMap: {
     zh: "zh_CN",
     en: "en_US",
