@@ -21,7 +21,7 @@
               <img
                 :src="tokenData.icon"
                 alt=""
-                class="w-[2rem] lg:w-[1.5rem]"
+                class="w-[2rem] lg:w-[1.5rem] rounded-full"
               />
               <span
                 class="text-[1.33rem] lg:text-[1rem] text-[white] font-bold ml-[0.6rem] mr-[0.8rem]"
