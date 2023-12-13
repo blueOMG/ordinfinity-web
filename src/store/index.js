@@ -5,7 +5,8 @@ import Utils from '@/utils/utils'
 import {getTokensBalance} from './../api/api'
 const state = {
   userAddress: '',
-  usdtBalance: 0,
+  tokenBalance: [{name:'ORDI',balance: 0},{name:'RATS',balance: 0},{name:'SATS',balance: 0},{name:'ONFI',balance: 0}],
+  mainChain: 1, // 1btc 2erc
 };
 
 const store = createStore({
@@ -16,16 +17,19 @@ const store = createStore({
       store.dispatch('getBalance',data);
     },
     setBalance(state, data) {
-      state.usdtBalance = data
+      state.tokenBalance = data
     },
-
+    setMainChain(state, data) {
+      console.log(data)
+      state.mainChain = data
+    },
   },
   actions: {
     async getBalance(context,address) {
       console.log(state)
-      const res = getTokensBalance({address,token: 'ordi,rats,sats,onfi' });
-      console.log(res)
-      context.commit('setBalance',res.data)
+      const res = await getTokensBalance({address,token: 'ordi,rats,sats,onfi' });
+      const data =res.data.map(item=> ({balance: item.availableBalance, name: item.ticker.toLocaleUpperCase()}));
+      context.commit('setBalance',data)
     },
   }
 });

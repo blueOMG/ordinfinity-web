@@ -17,6 +17,7 @@
     </div>
     <div class="p-[1.67rem] lg:p-[1.87rem] flex">
       <div
+      v-if="$store.state.mainChain==1"
         @click="link('sat')"
         class="w-[9rem] h-[9rem] lg:w-[8rem] lg:h-[8rem] rounded-[1.5rem] lg:rounded-[1rem] flex flex-col items-center justify-center mr-[1.6rem] lg:mr-[1.87rem] bg-[#212223] cursor-pointer"
       >
@@ -86,14 +87,19 @@ export default {
         return;
       }
       try {
-        const accounts = await okxwallet.request({
-          method: "eth_requestAccounts",
-        });
-        console.log(accounts);
-        localStorage.setItem("WALLETTYPE", "okx");
-        this.$store.commit("setUseraddress", accounts[0]);
+        const accounts = await okxwallet.requestWallets(true);
+        const ctype = this.$store.state.mainChain == 1 ? 0 : 60;
+        console.log(ctype)
+        let addressItem = {}; 
+        accounts[0].address.some(item=>{
+          if(item.coinType == ctype) {
+            addressItem = item;
+            return true
+          }
+        })
+        localStorage.setItem('WALLETTYPE','okx');
+        this.$store.commit('setUseraddress',addressItem.address);
         this.$emit("close");
-        // this.getBalance(accounts[0]);
         utils.accountChange();
       } catch (error) {}
     },

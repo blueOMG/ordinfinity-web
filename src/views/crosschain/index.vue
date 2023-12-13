@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import linkwallet from './dialog/linkWallet.vue'
+import linkwallet from './dialog/linkwallet.vue'
 import walletinfo from './dialog/walletinfo.vue'
 import utils from '../../utils/utils'
 export default {
@@ -125,6 +125,19 @@ export default {
       //
       showlink: false,
       showInfo: false,
+    }
+  },
+  watch: {
+    "$store.state.mainChain"(pre,now) {
+      console.log(pre,now)
+      if(pre !=now) {
+        // const type = localStorage.getItem('WALLETTYPE');
+        // if(type=='okx') {
+        //   this.linkOkx();
+        //   return 
+        // }
+        this.showlink = true;
+      }
     }
   },
   mounted() {
@@ -145,7 +158,8 @@ export default {
       }
     },
     async linkSat() {
-      if (typeof window.unisat !== 'undefined') {
+      if (typeof window.unisat == 'undefined') {
+        ElNotification.error("Not found unisat wallet");
         return 
       }
       try {
@@ -159,13 +173,22 @@ export default {
     },
     async linkOkx() {
       if(!window.okxwallet) {
+        ElNotification.error("Not found OKX wallet");
         return 
       }
       try {
-        const accounts = await okxwallet.request({ method: 'eth_requestAccounts' });
-        console.log(accounts)
+        const accounts = await okxwallet.requestWallets(true);
+        const ctype = this.$store.state.mainChain == 1 ? 0 : 60;
+        console.log(ctype)
+        let addressItem = {}; 
+        accounts[0].address.some(item=>{
+          if(item.coinType == ctype) {
+            addressItem = item;
+            return true
+          }
+        })
         localStorage.setItem('WALLETTYPE','okx');
-        this.$store.commit('setUseraddress',accounts[0]);
+        this.$store.commit('setUseraddress',addressItem.address);
         utils.accountChange();
       } catch (error) {
         

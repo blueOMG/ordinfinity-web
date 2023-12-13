@@ -140,7 +140,7 @@ const utils = {
   accountChange() {
     const type = localStorage.getItem('WALLETTYPE');
     if(type=='okx') {
-      okxwallet.on('accountsChanged', ()=>{window.location.reload();});
+      okxwallet.on('accountsChanged', (val)=>{console.log('change',val)});
     } else {
       unisat.on('accountsChanged', ()=>{window.location.reload();});
     }

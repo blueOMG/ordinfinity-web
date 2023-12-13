@@ -38,7 +38,7 @@
           }}</span>
           <span
             class="flex-1 text-right text-[1.33rem] lg:text-[1rem] text-white font-bold"
-            >{{ "0.00" }}</span
+            >{{ item.balance }}</span
           >
         </div>
       </div>
@@ -56,10 +56,10 @@ export default {
   data() {
     return {
       tokenList: [
-        { icon: ORDI, name: "ORDI" },
-        { icon: RATS, name: "RATS" },
-        { icon: SATS, name: "SATS" },
-        { icon: ONFI, name: "ONFI" },
+        { balance: '--', icon: ORDI, name: "ORDI" },
+        { balance: '--', icon: RATS, name: "RATS" },
+        { balance: '--', icon: SATS, name: "SATS" },
+        { balance: '--', icon: ONFI, name: "ONFI" },
       ],
     };
   },
@@ -68,8 +68,17 @@ export default {
   },
   methods: {
     async getBalance() {
-      const res = await unisat.getInscriptions(0, 100);
-      console.log(res);
+      const tokenba = this.$store.state.tokenBalance;
+      console.log('tokenba@@',tokenba)
+      const data = this.tokenList.reduce((acc,item)=>{
+        const res = tokenba.filter(it=>it.name==item.name)[0];
+        acc.push({
+          ...item,
+          balance: res.balance
+        });
+        return acc;
+      },[]);
+      this.tokenList = data;
     },
     select(item) {
       this.$emit("choose", item);

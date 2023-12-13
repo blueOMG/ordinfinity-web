@@ -43,7 +43,7 @@
               class="flex justify-between items-center text-[#59595A] text-[1.17rem] lg:text-[0.88rem] mb-[1rem]"
             >
               <span>From</span>
-              <span>Balance: {{ "0.00" }}</span>
+              <span>Balance: {{ currentBalance }}</span>
             </div>
             <div
               class="flex items-center"
@@ -86,6 +86,7 @@
           </div>
           <div
             class="w-[2.5rem] lg:w-[1.9rem] mx-auto my-[1.67rem] lg:my-[1.25rem]"
+            @click="exchangeChain"
           >
             <img
               src="../../../../assets/img/cross/transfer.png"
@@ -163,7 +164,7 @@
           >
             <span>Service fees: <span class="text-white">{{ "0.00" }}</span></span>
             <span
-              >Balance: <span class="text-white">{{ "0.00" }}</span></span
+              >Balance: <span class="text-white">{{ currentBalance }}</span></span
             >
           </div>
           <div
@@ -390,10 +391,49 @@ export default {
       chain1Data: { icon: btcimg, name: "Bitcoin" },
       chain2Data: { icon: ethimg, name: "Ethereum" },
       hlist: [],
+      // 当前所选的币所在的余额
+      currentBalance: '--',
     };
   },
-
+  watch: {
+    chain1Data() {
+      if(this.chain1Data.name == 'Bitcoin') {
+        this.$store.commit('setMainChain',1);
+      } else {
+        console.log(1222)
+        this.$store.commit('setMainChain',2);
+      }
+    },
+    "$store.state.tokenBalance"() {
+      this.getCurrentTokenBalance()
+    },
+    tokenData() {
+      this.getCurrentTokenBalance()
+    }
+  },
+  mounted() {
+    if(this.$store.state.userAddress) {
+      this.getCurrentTokenBalance();
+    }
+  },
   methods: {
+    getCurrentTokenBalance(){
+      const tokenba = this.$store.state.tokenBalance;
+      const currentBalance = tokenba.reduce((acc,item)=>{
+        if(item.name == this.tokenData.name) {
+          acc = item.balance
+        }
+        return acc
+      },'0');
+      this.currentBalance = currentBalance;
+    },
+    exchangeChain() {
+      const { chain1Data,chain2Data } = this;
+      const data1 = JSON.parse(JSON.stringify(chain1Data));
+      const data2 = JSON.parse(JSON.stringify(chain2Data));
+      this.chain1Data = data2;
+      this.chain2Data = data1;
+    },
     closeSelect() {
       this.openSelect1 = false;
       this.openSelect2 = false;
