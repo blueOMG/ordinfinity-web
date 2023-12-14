@@ -26,9 +26,9 @@ const store = createStore({
   },
   actions: {
     async getBalance(context,address) {
-      console.log(state)
+      console.log('context@@@@@',context)
       try {
-        const res = await getTokensBalance({address,token: 'ordi,rats,sats,onfi' });
+        const res = await getTokensBalance({chain: context.state.mainChain,address,token: 'ordi,rats,sats,onfi' });
         const data =res.data.map(item=> ({balance: item.availableBalance, name: item.ticker.toLocaleUpperCase()}));
         context.commit('setBalance',data)
       } catch (error) {

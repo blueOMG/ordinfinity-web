@@ -3,6 +3,10 @@
    <div class="w-[20rem] h-[4rem] bg-red-300 mt-16" @click="link">link</div>
    <div>{{ addr }}</div>
    <div class="w-[20rem] h-[4rem] bg-red-300 mt-16" @click="send">send</div>
+
+   <div class="w-full h-[40rem] flex items-center justify-center">
+    <img src="../../../../assets/img/home/ball.png" alt="" class="ballanimate" />
+   </div>
   </div>
 </template>
 
@@ -58,5 +62,19 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
+.ballanimate {
+  width: 400px;
+  height: 400px;
+  transform-style: preserve-3d;
+      animation: rotateSphere 20s infinite linear;
+}
+@keyframes rotateSphere {
+      from {
+        transform: rotate(0) ;
+      }
+      to {
+        transform: rotate(360deg) 
+      }
+    }
 </style>
