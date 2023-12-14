@@ -370,6 +370,7 @@ import btcimg from "../../../../assets/img/home/btc.png";
 import ethimg from "../../../../assets/img/home/eth.png";
 import ORDIimg from "../../../../assets/img/token/ORDI.png";
 import nodata from "../../../../components/Nodata.vue";
+import {getHistory} from '../../../../api/api'
 export default {
   components: {
     choosetoken,
@@ -390,9 +391,12 @@ export default {
       ],
       chain1Data: { icon: btcimg, name: "Bitcoin" },
       chain2Data: { icon: ethimg, name: "Ethereum" },
-      hlist: [],
+      
       // 当前所选的币所在的余额
       currentBalance: '--',
+      // 
+      hlist: [],
+      page: 1
     };
   },
   watch: {
@@ -414,9 +418,19 @@ export default {
   mounted() {
     if(this.$store.state.userAddress) {
       this.getCurrentTokenBalance();
+      this.getTransferList()
     }
+    
   },
   methods: {
+    getTransferList(more) {
+      getHistory({
+        address: this.$store.state.userAddress,
+        page: this.page
+      }).then(res=>{
+        console.log(res)
+      })
+    },
     getCurrentTokenBalance(){
       const tokenba = this.$store.state.tokenBalance;
       const currentBalance = tokenba.reduce((acc,item)=>{

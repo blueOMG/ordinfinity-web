@@ -177,18 +177,17 @@ export default {
         return 
       }
       try {
-        const accounts = await okxwallet.requestWallets(true);
         const ctype = this.$store.state.mainChain == 1 ? 0 : 60;
-        console.log(ctype)
-        let addressItem = {}; 
-        accounts[0].address.some(item=>{
-          if(item.coinType == ctype) {
-            addressItem = item;
-            return true
-          }
-        })
+        let account = '';
+        if(ctype==0) {
+          const result = await okxwallet.bitcoin.connect()
+          account = result.address;
+        } else {
+          const res = await okxwallet.request({ method: 'eth_requestAccounts' });
+          account = res[0]
+        }
         localStorage.setItem('WALLETTYPE','okx');
-        this.$store.commit('setUseraddress',addressItem.address);
+        this.$store.commit('setUseraddress',account);
         utils.accountChange();
       } catch (error) {
         
