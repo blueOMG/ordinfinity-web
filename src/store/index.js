@@ -5,7 +5,7 @@ import Utils from '@/utils/utils'
 import {getTokensBalance} from './../api/api'
 const state = {
   userAddress: '',
-  tokenBalance: [{name:'ORDI',balance: 0},{name:'RATS',balance: 0},{name:'SATS',balance: 0},{name:'ONFI',balance: 0}],
+  tokenBalance: [{name:'ORDI',balance: 0},{name:'TTIN',balance: 0},{name:'SATS',balance: 0},{name:'ONFI',balance: 0}],
   mainChain: 1, // 1btc 2erc
 };
 
@@ -28,12 +28,12 @@ const store = createStore({
     async getBalance(context,address) {
       console.log('context@@@@@',context)
       try {
-        const res = await getTokensBalance({chain: context.state.mainChain,address,token: 'ordi,rats,sats,onfi' });
+        const res = await getTokensBalance({chain: context.state.mainChain,address,token: 'ordi,TTIN,sats,onfi' });
         const data =res.data.map(item=> ({balance: item.availableBalance, name: item.ticker.toLocaleUpperCase()}));
         context.commit('setBalance',data)
       } catch (error) {
         console.log('error@@@@@@@@@')
-        const data = [{name:'ORDI',balance: 0},{name:'RATS',balance: 0},{name:'SATS',balance: 0},{name:'ONFI',balance: 0}]
+        const data = [{name:'ORDI',balance: 0},{name:'TTIN',balance: 0},{name:'SATS',balance: 0},{name:'ONFI',balance: 0}]
         context.commit('setBalance',data)
       }
       

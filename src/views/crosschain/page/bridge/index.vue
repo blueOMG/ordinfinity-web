@@ -153,11 +153,29 @@
               type="text"
               class="flex-1 text-[1.33rem] lg:text-[1rem] text-white bg-transparent outline-none border-none"
               placeholder="Amount"
+              v-show="!isCustom"
             />
+            <div class="flex-1 relative" v-show="isCustom">
+              <div class="flex items-center justify-between w-full cursor-pointer" @click="showSelectBalance = !showSelectBalance">
+                <span class="text-[#fff] text-[1rem] flex-1 text-left" v-show="transferAmountData">{{ transferAmountData ? transferAmountData.amount : '' }}</span>
+                <span class="text-[#272727] text-[1rem] flex-1 text-left" v-show="!transferAmountData">{{  'please select amount' }}</span>
+                <img src="../../../../assets/img/cross/arrow_down.png" class="w-[1rem]" alt="" />
+              </div>
+              <div class=" absolute left-0 top-[2rem] w-full bg-[#272727] rounded-xl overflow-y-auto" v-show="isCustom && showSelectBalance">
+                <el-scrollbar height="120px">
+                  <div class=" rounded-[0.2rem] text-[#fff] text-[1rem] h-[2rem] leading-8 mx-[0.5rem] px-[0.5rem] mb-1 hover:bg-[#999] cursor-pointer"
+                    v-for="item in currentInscriptList"
+                    @click="selectBalance(item)"
+                  >{{ item.amount }}</div>
+                </el-scrollbar>
+              </div>
+            </div>
             <span
-              class="pl-0.5 text-[#F7931A] text-[1.33rem] lg:text-[1rem] font-bold flex-shrink-0 cursor-pointer"
-              >Max</span
-            >
+              class=" text-[#F7931A] text-[1.33rem] lg:text-[1rem] font-bold flex-shrink-0 cursor-pointer border-l-[1px] border-[#272727] pl-[0.5rem] ml-4"
+              @click="isCustom=!isCustom"
+              >
+              {{!isCustom ? 'Customize' : 'Recommend'}}
+              </span>
           </div>
           <div
             class="flex flex-col lg:flex-row items-start lg:items-center justify-between text-[1.17rem] lg:text-[0.88rem] mt-[0.83rem] lg:mt-[0.66rem] text-[#59595A]"
@@ -184,7 +202,8 @@
           </div>
           <div
             class="w-full h-[4.17rem] lg:h-[3.44rem] bg-[#F7931A] rounded-full mt-[2.5rem] mb-[1.8rem] text-center leading-[4.17rem] lg:leading-[3.44rem] text-[1.5rem] lg:text-[1.13rem] text-[#ffffff] cursor-pointer hover-scale"
-          >
+            @click="transferFn"
+            >
             Transfer
           </div>
           <div class="flex items-center justify-center">
@@ -370,7 +389,8 @@ import btcimg from "../../../../assets/img/home/btc.png";
 import ethimg from "../../../../assets/img/home/eth.png";
 import ORDIimg from "../../../../assets/img/token/ORDI.png";
 import nodata from "../../../../components/Nodata.vue";
-import {getHistory} from '../../../../api/api'
+import {getHistory , preorder,crorder} from '../../../../api/api'
+import { ElMessage } from "element-plus";
 export default {
   components: {
     choosetoken,
@@ -394,6 +414,15 @@ export default {
       
       // 当前所选的币所在的余额
       currentBalance: '--',
+      currentInscriptList: [],
+      // 输入框
+      isCustom: true,
+      showSelectBalance: false,
+      // 转账数量
+      transferAmountData: null,
+      // 接收地址
+      reciveAddr: '',
+
       // 
       hlist: [],
       page: 1
@@ -423,6 +452,7 @@ export default {
     
   },
   methods: {
+    // 获取记录
     getTransferList(more) {
       getHistory({
         address: this.$store.state.userAddress,
@@ -431,16 +461,20 @@ export default {
         console.log(res)
       })
     },
+    // 获取当前余额
     getCurrentTokenBalance(){
       const tokenba = this.$store.state.tokenBalance;
       const currentBalance = tokenba.reduce((acc,item)=>{
         if(item.name == this.tokenData.name) {
-          acc = item.balance
+          acc.a = item.balance;
+          acc.b = item.transferableList
         }
         return acc
-      },'0');
-      this.currentBalance = currentBalance;
+      },{a: 0, b: []});
+      this.currentBalance = currentBalance.a;
+      this.currentInscriptList = currentBalance.b;
     },
+    // 切换链
     exchangeChain() {
       const { chain1Data,chain2Data } = this;
       const data1 = JSON.parse(JSON.stringify(chain1Data));
@@ -448,6 +482,7 @@ export default {
       this.chain1Data = data2;
       this.chain2Data = data1;
     },
+    //
     closeSelect() {
       this.openSelect1 = false;
       this.openSelect2 = false;
@@ -471,6 +506,88 @@ export default {
       } else {
         this.chain1Data = { icon: ethimg, name: "Ethereum" };
       }
+    },
+    //选择金额
+    selectBalance(item) {
+      this.transferAmountData = {
+        amount: item.amount,
+        inId: item.inscriptionId
+      };
+    },
+    async transferFn() {
+      if(!this.isCustom) {
+        ElMessage.warning('请前往钱包tansfer相应数量');
+        return 
+      }
+      if(!this.transferAmountData) {
+        ElMessage.warning('请选择数量进行转账');
+        return
+      }
+      // loading 开始
+      if(this.chain1Data.name == 'Bitcoin') { // to erc
+        const type = localStorage.getItem('WALLETTYPE');
+        if(type=='sat') {
+          this.unisatTransfer();
+        } else {
+          this.okxTransferToerc();
+        }
+      }
+      
+    },
+    // unisat btc to erc
+    async unisatTransfer() {
+      const res = await preorder({
+        from_chain: this.chain1Data.name,
+        to_chain: this.chain2Data.name,
+        from_address: this.$store.state.userAddress,
+        to_address: '0x9B861f4B0D3C7E9977801578C91F0855a9199D78',
+        token: this.tokenData.name,
+        amount: this.transferAmountData.amount,
+        inscriptionId: this.transferAmountData.inId
+      });
+      console.log('@@@@@@@',res)
+      const data = res.data;
+      const hex = await window.unisat.signPsbt(data.psbt_hex,data.toSignInputs);
+      const txid = await window.unisat.pushPsbt(hex)
+      const res1 = await crorder({
+        txid,
+        from_chain: this.chain1Data.name,
+        to_chain: this.chain2Data.name,
+        from_address: this.$store.state.userAddress,
+        to_address: '0x9B861f4B0D3C7E9977801578C91F0855a9199D78',
+        token: this.tokenData.name,
+        amount: this.transferAmountData.amount,
+        inscriptionId: this.transferAmountData.inId
+      });
+    },
+    // okx btc to  erc
+    async okxTransferToerc() {
+      const res = await preorder({
+        from_chain: this.chain1Data.name,
+        to_chain: this.chain2Data.name,
+        from_address: this.$store.state.userAddress,
+        to_address: '0x9B861f4B0D3C7E9977801578C91F0855a9199D78',
+        token: this.tokenData.name,
+        amount: this.transferAmountData.amount,
+        inscriptionId: this.transferAmountData.inId
+      });
+      console.log('@@@@@@@',res)
+      const data = res.data;
+      const hex = await window.okxwallet.bitcoin.sendPsbt(data.psbt_hex,data.toSignInputs);
+      const txid = await window.okxwallet.bitcoin.pushPsbt(hex)
+      const res1 = await crorder({
+        txid,
+        from_chain: this.chain1Data.name,
+        to_chain: this.chain2Data.name,
+        from_address: this.$store.state.userAddress,
+        to_address: '0x9B861f4B0D3C7E9977801578C91F0855a9199D78',
+        token: this.tokenData.name,
+        amount: this.transferAmountData.amount,
+        inscriptionId: this.transferAmountData.inId
+      });
+    },
+    async okxTransferTobtc() {
+      // web3.js 调用来转
     },
   },
 };

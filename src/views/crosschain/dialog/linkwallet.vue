@@ -103,7 +103,7 @@ export default {
       } catch (error) {}
     },
     async getBalance(address) {
-      const res = getTokensBalance({address,token: 'ordi,rats,sats,onfi' });
+      const res = getTokensBalance({address,token: 'ordi,TTIN,sats,onfi' });
       console.log(res)
       this.$store.commit()
     },

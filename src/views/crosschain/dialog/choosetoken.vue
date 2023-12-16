@@ -57,7 +57,7 @@ export default {
     return {
       tokenList: [
         { balance: '--', icon: ORDI, name: "ORDI" },
-        { balance: '--', icon: RATS, name: "RATS" },
+        { balance: '--', icon: RATS, name: "TTIN" },
         { balance: '--', icon: SATS, name: "SATS" },
         { balance: '--', icon: ONFI, name: "ONFI" },
       ],
