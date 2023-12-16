@@ -12,13 +12,16 @@ import { Loading } from 'vant'
 import 'vant/lib/index.css';
 import store from './store/index'
 import EventBus from '@/utils/eventBus'
+import Particles from "particles.vue3";
 // import { registerSW } from 'virtual:pwa-register';
 let app = createApp(App)
 app.use(i18n);
 app.use(router)
 app.use(store)
 app.use(Loading)
+app.use(Particles)
 app.mount('#app')
+
 // registerSW();
 
 let $bus = new EventBus()

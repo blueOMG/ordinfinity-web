@@ -1,7 +1,7 @@
 <template>
   <div>
     <layoutHead :overflow="overflow" />
-    <div class="main h-[100vh] overflow-auto" ref="body">
+    <div class="main overflow-x-hidden relative z-[1]" ref="body">
       <router-view></router-view>
     </div>
   </div>
@@ -19,8 +19,9 @@ export default {
     layoutHead,
   },
   mounted() {
-    this.$refs.body.addEventListener("scroll", (e) => {
-      this.overflow = e.srcElement.scrollTop > 70;
+    window.addEventListener("scroll", (e) => {
+      console.log('@@@@@',e)
+      this.overflow = window.scrollY > 70;
     });
   },
 };

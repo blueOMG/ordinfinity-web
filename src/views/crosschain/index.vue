@@ -194,7 +194,13 @@ export default {
       }
     },
     selectRoute(val) {
-      this.routeTab = val;
+      // this.routeTab = val;
+      // if(val==1 && this.routeTab == 2) {
+      //   this.$router.push('/cross/bridge')
+      // }
+      // if(val==2 && this.routeTab == 1) {
+      //   this.$router.push('/cross/borrow')
+      // }
     }
   }
 }
