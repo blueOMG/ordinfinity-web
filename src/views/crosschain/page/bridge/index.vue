@@ -146,7 +146,7 @@
             class="w-full flex items-center h-[4.17rem] lg:h-[3.13rem] border border-[#272727] rounded-[1rem] px-[1.25rem] lg:px-[0.94rem] mt-[1.67rem] lg:mt-[1.25rem]">
             <input type="text" v-model="reciveAddr"
               class="w-full text-[1.33rem] lg:text-[1rem] text-white bg-transparent outline-none border-none"
-              :placeholder="`Enter ${chain1Data.name == 'Bitcoin' ? 'BRC-20' : 'ERC-20'} Recipient Address`" />
+              :placeholder="`Enter ${chain1Data.name == 'Bitcoin' ? 'ERC-20' : 'BRC-20'} Recipient Address`" />
           </div>
           <div
             class="flex items-center justify-between text-[1.17rem] lg:text-[0.88rem] mt-[0.83rem] lg:mt-[0.66rem] text-[#59595A]">
@@ -175,42 +175,43 @@
         <div v-if="!hlist.length && !hlistloading" class="lg:hidden w-full bg-[#1A1B1D] rounded-[1.67rem] mb-8">
           <nodata />
         </div>
-        <div v-else class="lg:hidden w-full bg-[#1A1B1D] rounded-[1.67rem]" v-for="item in hlist" :key="item">
+        <div v-if="hlist.length">
+        <div  class="lg:hidden w-full bg-[#1A1B1D] rounded-[1.67rem]" v-for="item in hlist" :key="item">
           <div class="p-[1.25rem] border-b-[1px] border-[#272727] flex items-center">
             <div class="relative">
               <img src="../../../../assets/img/home/eth.png" alt="" class="w-[3.3rem] absolute left-0 top-0 z-[2]" />
               <img src="../../../../assets/img/home/btc.png" alt=""
                 class="w-[3.3rem] absolute left-[2.3rem] top-0 z-[1]" />
             </div>
-            <span class="text-white text-[1.67rem] flex-1 text-right font-bold">BITCOIN-Ethereum</span>
+            <span class="text-white text-[1.67rem] flex-1 text-right font-bold">{{item.from_chain=='btc' ? 'Bitcoin-Ethereum' : 'Ethereum-Bitcoin' }}</span>
           </div>
 
           <div class="px-[1.25rem] pb-[2.5rem] mb-[1.75rem]">
             <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
               <span class="text-[#999999]">Time</span>
-              <span class="text-white font-bold">2023.11.23 11:14:13</span>
+              <span class="text-white font-bold">{{ new Date(item.create_time*1000).toLocaleString() }}</span>
             </div>
             <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
               <span class="text-[#999999]">Amount</span>
-              <span class="text-white font-bold">123564</span>
+              <span class="text-white font-bold">{{ (item.amount*1).toFixed(2) }} {{ item.token }}</span>
             </div>
             <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
               <span class="text-[#999999]">Fee</span>
-              <span class="text-white font-bold">13</span>
+              <span class="text-white font-bold">{{ item.fee || '--' }}</span>
             </div>
             <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
-              <span class="text-[#999999]">Transfer TXID</span>
-              <span class="text-white font-bold">3HxnEx*******TAddot</span>
+              <span class="text-[#999999]">Transfer Address</span>
+              <span class="text-white font-bold">{{ item.from_address.slice(0,4)+'***'+ item.from_address.slice(-4)}}</span>
             </div>
             <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
-              <span class="text-[#999999]">Receive TXID</span>
-              <span class="text-white font-bold">3HxnEx*******TAddot</span>
+              <span class="text-[#999999]">Receive Address</span>
+              <span class="text-white font-bold">{{ item.to_address.slice(0,4)+'***'+ item.to_address.slice(-4)}}</span>
             </div>
             <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
               <span class="text-[#999999]">Status</span>
               <div class="text-white font-bold flex items-center">
-                <img src="../../../../assets/img/cross/time.png" class="w-[1.3rem] mr-2" alt="" />
-                <span>Unconfirmed</span>
+                <img :src="item.status=='Verifying' ? hlistStatusImg.verifyImg:hlistStatusImg.successImg" class="w-[1.3rem] mr-2" alt="" />
+                <span>{{ item.status }}</span>
               </div>
             </div>
             <div
@@ -219,6 +220,7 @@
             </div>
           </div>
         </div>
+      </div>
         <!-- pc list -->
         <div class="bg-[#1A1B1D] rounded-[1.25rem] w-full hidden lg:block">
           <div
@@ -226,35 +228,37 @@
             <span class="w-[8.8rem] text-left mr-8">Time</span>
             <span class="flex-1 text-left mr-8">Amount</span>
             <span class="w-[8rem] text-left mr-8">Fee</span>
-            <span class="flex-1 text-left mr-8">Transfer TXID</span>
-            <span class="flex-1 text-left mr-8">Receive TXID</span>
-            <span class="flex-1 text-left mr-8">Status</span>
-            <span class="w-[8rem] text-center">Operation </span>
+            <span class="flex-1 text-left mr-8">Transfer Address</span>
+            <span class="flex-1 text-left mr-8">Receive Address</span>
+            <span class="flex-1 text-right">Status</span>
+            <!-- <span class="w-[8rem] text-center">Operation </span> -->
           </div>
           <div v-if="!hlist.length && !hlistloading">
             <nodata />
           </div>
-          <div v-else
-            class="flex items-center py-[1.25rem] px-[2rem] text-[#ffffff] text-[0.88rem] border-b-[1px] border-[#272727]"
-            v-for="item in hlist" :key="item">
-            <span class="w-[8.8rem] text-left mr-8">2023.11.23 11:14:13</span>
-            <span class="flex-1 text-left mr-8">1,984.0 ORDI</span>
-            <span class="w-[8rem] text-left mr-8">16.2</span>
+          <div  v-if="hlist.length">
+            <div
+              class="flex items-center py-[1.25rem] px-[2rem] text-[#ffffff] text-[0.88rem] border-b-[1px] border-[#272727]"
+              v-for="item in hlist" :key="item">
+              <span class="w-[8.8rem] text-left mr-8">{{ new Date(item.create_time*1000).toLocaleString() }}</span>
+              <span class="flex-1 text-left mr-8">{{ (item.amount*1).toFixed(2) }} {{ item.token }}</span>
+              <span class="w-[8rem] text-left mr-8">{{ item.fee || '--' }}</span>
 
-            <div class="flex-1 flex items-center mr-8">
-              <img src="../../../../assets/img/home/btc.png" class="w-[1.5rem] mr-[0.38rem]" alt="" />
-              <span>3HxnEx*******TAddot</span>
+              <div class="flex-1 flex items-center mr-8">
+                <img :src="item.from_chain=='btc'?hlistChainImg.btcimg:hlistChainImg.ethimg" class="w-[1.5rem] mr-[0.38rem]" alt="" />
+                <span>{{ item.from_address.slice(0,4)+'***'+ item.from_address.slice(-4)}}</span>
+              </div>
+              <div class="flex-1 flex items-center mr-8">
+                <img :src="item.to_chain=='btc'?hlistChainImg.btcimg:hlistChainImg.ethimg" class="w-[1.5rem] mr-[0.38rem]" alt="" />
+                <span>{{ item.to_address.slice(0,4)+'***'+ item.to_address.slice(-4)}}</span>
+              </div>
+              <div class="flex-1 flex items-center justify-end">
+                <img :src="item.status=='Verifying' ? hlistStatusImg.verifyImg:hlistStatusImg.successImg" class="w-[1rem] mr-[0.38rem]" alt="" />
+                <span>{{ item.status }}</span>
+              </div>
+              <!-- <span
+                class="w-[8rem] h-[2.2rem] leading-[2.2rem] rounded-full bg-[#F7931A] text-[#ffffff] font-bold text-center cursor-pointer">withDraw</span> -->
             </div>
-            <div class="flex-1 flex items-center mr-8">
-              <img src="../../../../assets/img/home/eth.png" class="w-[1.5rem] mr-[0.38rem]" alt="" />
-              <span>3HxnEx*******TAddot</span>
-            </div>
-            <div class="flex-1 flex items-center mr-8">
-              <img src="../../../../assets/img/cross/success.png" class="w-[1rem] mr-[0.38rem]" alt="" />
-              <span>Complete</span>
-            </div>
-            <span
-              class="w-[8rem] h-[2.2rem] leading-[2.2rem] rounded-full bg-[#F7931A] text-[#ffffff] font-bold text-center cursor-pointer">withDraw</span>
           </div>
         </div>
 
@@ -281,9 +285,12 @@ import btcimg from "../../../../assets/img/home/btc.png";
 import ethimg from "../../../../assets/img/home/eth.png";
 import ORDIimg from "../../../../assets/img/token/ORDI.png";
 import nodata from "../../../../components/Nodata.vue";
+import successImg from "../../../../assets/img/cross/success.png";
+import verifyImg from "../../../../assets/img/cross/time.png";
 import { getHistory, preorder, crorder, getTokensBalance,getFee } from '../../../../api/api'
 import { ElMessage } from "element-plus";
 import { showLoadingToast, closeToast } from "vant";
+
 export default {
   components: {
     choosetoken,
@@ -326,6 +333,14 @@ export default {
       },
       // 列表数据
       hlist: [],
+      hlistChainImg: {
+        btcimg,
+        ethimg
+      },
+      hlistStatusImg: {
+        successImg,
+        verifyImg
+      },
       hlistloading: true,
       finished: false,
       page: 1
@@ -418,8 +433,9 @@ export default {
         address: this.$store.state.userAddress,
         page: more ? this.page + 1 : this.page
       }).then(res => {
+        
         if (res.data) {
-          if (loadMore) {
+          if (more) {
             this.page = this.page + 1;
             this.hlist = this.hlist.concat(res.data);
           } else {
@@ -505,7 +521,8 @@ export default {
     async customAdd() {
       const type = localStorage.getItem('WALLETTYPE');
       if (type == 'sat') {
-        ElNotification.warning('please add inscription in unisat wallet');
+        await unisat.inscribeTransfer(this.tokenData.name.toLocaleLowerCase())
+        this.refreshBalance();
       } else {
         console.log(this.tokenData.name)
         const res = await okxwallet.bitcoin.inscribe({ type: 51, from: this.$store.state.userAddress, tick: this.tokenData.name.toLocaleLowerCase() })
@@ -530,11 +547,15 @@ export default {
     },
     // 调用跨链
     async transferFn() {
-
-      // if (!this.transferAmountData) {
-      //   ElNotification.warning('Please Choose an inscription');
-      //   return
-      // }
+      const fromType = this.chain1Data.name;
+      if (fromType == 'Bitcoin' &&!this.transferAmountData) {
+        ElNotification.warning('Please Choose an inscription');
+        return
+      }
+      if (fromType != 'Bitcoin' && (!this.ercAmount || isNaN(this.ercAmount * 1))) {
+        ElNotification.warning('Please input token amount');
+        return
+      }
       if (this.reciveAddr == '') {
         ElNotification.warning('Please input recive address');
         return
@@ -549,7 +570,7 @@ export default {
           this.okxTransferToerc();
         }
       } else {
-        this.okxTransferTobtc();
+        this.transferTobtc();
       }
 
     },
@@ -588,7 +609,7 @@ export default {
           from_address: this.$store.state.userAddress,
           to_address: this.reciveAddr,
           token: this.tokenData.name,
-          amount: this.currentInscriptList.amount,
+          amount: this.transferAmountData.amount,
           inscriptionId: this.transferAmountData.inId
         });
         console.log('preorder返回数据:', res)
@@ -600,17 +621,25 @@ export default {
         });
         console.log('transferNft返回数据:', txData)
         this.createOrder(txData.txhash,res.data.order_id);
-
       } catch (error) {
         console.log(error)
         closeToast();
         ElNotification.error("error,try again");
       }
     },
-    async okxTransferTobtc() {
-      closeToast();
+    async transferTobtc() {
+      const res = await preorder({
+          from_chain: this.chain1Data.chainStr,
+          to_chain: this.chain2Data.chainStr,
+          from_address: this.$store.state.userAddress,
+          to_address: this.reciveAddr,
+          token: this.tokenData.name,
+          amount: this.ercAmount *1,
+          inscriptionId: 'xxx'
+        });
+        console.log('zzzzzzzz',res)
       // web3.js 调用来转
-      alert('需要调用合约，还没有写')
+      // alert('需要调用合约，还没有写')
     },
     // 往后端传递 交易id 
     async createOrder(txid,order_id) {
@@ -632,7 +661,7 @@ export default {
         this.getTransferList();
       } catch (error) {
         setTimeout(() => {
-          this.createOrder(txid);
+          this.createOrder(txid,order_id);
         }, 2000);
       }
 
