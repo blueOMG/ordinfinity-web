@@ -112,6 +112,7 @@
 import linkwallet from './dialog/linkwallet.vue'
 import walletinfo from './dialog/walletinfo.vue'
 import utils from '../../utils/utils'
+import web3 from 'web3'
 export default {
   components: {
     linkwallet,
@@ -151,10 +152,12 @@ export default {
   },
   methods: {
     link(type) {
-      if(type=='sat') {
-        this.linkSat()
+      if (type == "sat") {
+        this.linkSat();
+      } else if(type=='okx') {
+        this.linkOkx();
       } else {
-        this.linkOkx()
+        this.linkMask();
       }
     },
     async linkSat() {
@@ -192,6 +195,20 @@ export default {
       } catch (error) {
         
       }
+    },
+    async linkMask() {
+      const data = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3Object = new web3(window.ethereum);
+      const chainId = await web3Object.eth.getChainId();
+      if (chainId != 1) {
+        ElNotification.error("Please switch ETH network");
+        return 
+      }
+      localStorage.setItem('WALLETTYPE','mask');
+      this.$store.commit('setWeb3js',web3Object);
+      this.$store.commit("setUseraddress", data[0]);
+      this.$emit("close");
+      utils.accountChange();
     },
     selectRoute(val) {
       // this.routeTab = val;

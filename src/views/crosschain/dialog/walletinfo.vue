@@ -23,6 +23,7 @@
 <script>
 import sat from '../../../assets/img/cross/sat.png';
 import okx from '../../../assets/img/cross/okx.png';
+import mask from '../../../assets/img/cross/mask.png';
 import utils from '../../../utils/utils'
 
 export default {
@@ -32,7 +33,14 @@ export default {
     }
   },
   mounted() {
-    this.walletImg = localStorage.getItem('WALLETTYPE')=='sat' ? sat : okx
+    const type = localStorage.getItem('WALLETTYPE');
+    if (type == "sat") {
+      this.walletImg = sat;
+    } else if(type=='okx') {
+      this.walletImg = okx;
+    } else {
+      this.walletImg = mask;
+    }
   },
   methods: {
     copy() {

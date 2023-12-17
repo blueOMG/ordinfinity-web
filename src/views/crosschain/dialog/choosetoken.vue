@@ -57,7 +57,7 @@ export default {
     return {
       tokenList: [
         { balance: '--', icon: ORDI, name: "ORDI" },
-        { balance: '--', icon: RATS, name: "TTIN" },
+        { balance: '--', icon: RATS, name: "RATS" },
         { balance: '--', icon: SATS, name: "SATS" },
         { balance: '--', icon: ONFI, name: "ONFI" },
       ],
@@ -72,9 +72,10 @@ export default {
       console.log('tokenba@@',tokenba)
       const data = this.tokenList.reduce((acc,item)=>{
         const res = tokenba.filter(it=>it.name==item.name)[0];
+        console.log(res)
         acc.push({
           ...item,
-          balance: res.balance
+          balance: (res.balance*1) +  (res.transferableBalance*1)
         });
         return acc;
       },[]);

@@ -1,5 +1,5 @@
 <template>
-  <div @click="closeSelect">
+  <div @click="closeSelect" class="infinite-list-wrapper relative">
     <div class="pt-[8rem] lg:py-[7rem] flex justify-center px-[1.25rem]">
       <div class="w-full lg:w-[34rem] lg:rounded-[1.25rem] rounded-[1.67rem] bg-[#1A1B1D]">
         <div
@@ -23,7 +23,7 @@
             :class="{ 'border-[#F7931A]': openSelect1 }">
             <div class="flex justify-between items-center text-[#59595A] text-[1.17rem] lg:text-[0.88rem] mb-[1rem]">
               <span>From</span>
-              <span>Balance: {{ currentBalance }}</span>
+              <span v-show="chain1Data.name == 'Ethereum'">Balance: {{ currentBalance }}</span>
             </div>
             <div class="flex items-center" @click.stop="openSelect1 = !openSelect1">
               <img :src="chain1Data.icon" alt="" class="w-[2rem] lg:w-[1.5rem]" />
@@ -80,7 +80,8 @@
             </div>
           </div>
           <!-- input -->
-          <div class="w-full h-[4.17rem] lg:h-[3.13rem] flex items-center   mt-[1.67rem] lg:mt-[1.25rem]">
+          <div class="w-full h-[4.17rem] lg:h-[3.13rem] flex items-center   mt-[1.67rem] lg:mt-[1.25rem]"
+            v-show="chain1Data.name == 'Bitcoin'">
 
             <div
               class="flex-1 relative border border-[#272727] h-[4.17rem] lg:h-[3.13rem] px-[1.25rem] lg:px-[0.94rem] flex items-center rounded-[1rem]">
@@ -96,12 +97,24 @@
                 v-show="showSelectBalance">
                 <el-scrollbar height="120px">
                   <div
-                    class="rounded-[0.2rem] text-[#fff] text-[1.2rem] lg:text-[1rem] h-[2rem] leading-8 mx-[0.5rem] px-[0.5rem] mb-1 hover:bg-[#333333] cursor-pointer"
-                    v-for="item in currentInscriptList" @click="selectBalance(item)">{{ item.amount }}</div>
-                  <div class="my-[0.5rem] w-full flex items-center justify-center">
-                    <span
-                      class="px-[0.5rem] py-[0.2rem] text-[#fff] text-[1.2rem] lg:text-[1rem] cursor-pointer bg-[#333333] rounded-lg"
-                      @click="customAdd">Customize Add</span>
+                    class="rounded-[0.2rem] py-[0.3rem] leading-8 mx-[0.5rem] px-[0.5rem] mb-1 hover:bg-[#333333] cursor-pointer flex items-center"
+                    v-for="item in currentInscriptList" @click="selectBalance(item)">
+                    <div class="w-3 h-3 rounded-full border border-[#999] mr-4 p-[2px]">
+                      <div class="w-full h-full rounded-full bg-[#F7931A]"
+                        v-show="(transferAmountData ? transferAmountData.inId : '') == item.inscriptionId"></div>
+                    </div>
+                    <div>
+                      <div class="text-[1.2rem] lg:text-[1rem] leading-6">
+                        <span class="text-[#F7931A] pr-1">{{ item.amount }}</span>
+                        <span class="text-[#999]">{{ tokenData.name }}</span>
+                      </div>
+                      <div class="text-[1rem] lg:text-[0.8rem] text-[#999] leading-4">#{{ item.inscriptionNumber }}</div>
+                    </div>
+                  </div>
+                  <div
+                    class="m-[0.5rem] h-[2.5rem] flex items-center justify-center text-[#fff] text-[1.2rem] lg:text-[1rem] cursor-pointer bg-[#F7931A] rounded-lg"
+                    @click="customAdd">
+                    New inscription
                   </div>
                 </el-scrollbar>
               </div>
@@ -114,19 +127,30 @@
             </div>
           </div>
           <div
+            class="w-full h-[4.17rem] lg:h-[3.13rem] flex items-center   mt-[1.67rem] lg:mt-[1.25rem] border border-[#272727] px-[1.25rem] lg:px-[0.94rem] rounded-[1rem]"
+            v-show="chain1Data.name != 'Bitcoin'">
+            <input 
+              type="text"
+              v-model="ercAmount"
+              class="border-none outline-none bg-transparent text-[#fff] text-[1.2rem] lg:text-[1rem] w-full"
+              placeholder="Enter amount"
+            />
+          </div>
+          <div
             class="flex flex-col lg:flex-row items-start lg:items-center justify-between text-[1.17rem] lg:text-[0.88rem] mt-[0.83rem] lg:mt-[0.66rem] text-[#59595A]">
-            <span>Service fees: <span class="text-white">{{ "0.00" }}</span></span>
-            <span>Balance: <span class="text-white">{{ currentBalance }}</span></span>
+            <span>Service fees: <span class="text-white">{{ feeData.fee}}</span></span>
+            <span v-show="chain1Data.name == 'Ethereum'">Balance: <span class="text-white">{{ currentBalance
+            }}</span></span>
           </div>
           <div
             class="w-full flex items-center h-[4.17rem] lg:h-[3.13rem] border border-[#272727] rounded-[1rem] px-[1.25rem] lg:px-[0.94rem] mt-[1.67rem] lg:mt-[1.25rem]">
-            <input type="text"
+            <input type="text" v-model="reciveAddr"
               class="w-full text-[1.33rem] lg:text-[1rem] text-white bg-transparent outline-none border-none"
               :placeholder="`Enter ${chain1Data.name == 'Bitcoin' ? 'BRC-20' : 'ERC-20'} Recipient Address`" />
           </div>
           <div
             class="flex items-center justify-between text-[1.17rem] lg:text-[0.88rem] mt-[0.83rem] lg:mt-[0.66rem] text-[#59595A]">
-            <span>You will receive: <span class="text-white">{{ "0.00" }}</span></span>
+            <span>You will receive: <span class="text-white">{{ feeData.receive}}</span></span>
             <span></span>
           </div>
           <div
@@ -146,91 +170,102 @@
       <div class="text-[2.5rem] lg:text-[1.88rem] text-[#ffffff] font-bold mb-[1.75rem] lg:mb-[1.56rem]">
         History
       </div>
-      <!-- phone list -->
-      <div v-if="!hlist.length" class="lg:hidden w-full bg-[#1A1B1D] rounded-[1.67rem] mb-8">
-        <nodata />
-      </div>
-      <div v-else class="lg:hidden w-full bg-[#1A1B1D] rounded-[1.67rem]" v-for="item in hlist" :key="item">
-        <div class="p-[1.25rem] border-b-[1px] border-[#272727] flex items-center">
-          <div class="relative">
-            <img src="../../../../assets/img/home/eth.png" alt="" class="w-[3.3rem] absolute left-0 top-0 z-[2]" />
-            <img src="../../../../assets/img/home/btc.png" alt="" class="w-[3.3rem] absolute left-[2.3rem] top-0 z-[1]" />
-          </div>
-          <span class="text-white text-[1.67rem] flex-1 text-right font-bold">BITCOIN-Ethereum</span>
-        </div>
-
-        <div class="px-[1.25rem] pb-[2.5rem] mb-[1.75rem]">
-          <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
-            <span class="text-[#999999]">Time</span>
-            <span class="text-white font-bold">2023.11.23 11:14:13</span>
-          </div>
-          <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
-            <span class="text-[#999999]">Amount</span>
-            <span class="text-white font-bold">123564</span>
-          </div>
-          <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
-            <span class="text-[#999999]">Fee</span>
-            <span class="text-white font-bold">13</span>
-          </div>
-          <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
-            <span class="text-[#999999]">Transfer TXID</span>
-            <span class="text-white font-bold">3HxnEx*******TAddot</span>
-          </div>
-          <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
-            <span class="text-[#999999]">Receive TXID</span>
-            <span class="text-white font-bold">3HxnEx*******TAddot</span>
-          </div>
-          <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
-            <span class="text-[#999999]">Status</span>
-            <div class="text-white font-bold flex items-center">
-              <img src="../../../../assets/img/cross/time.png" class="w-[1.3rem] mr-2" alt="" />
-              <span>Unconfirmed</span>
-            </div>
-          </div>
-          <div
-            class="w-full h-[3.75rem] rounded-full bg-[#F7931A] text-center text-white text-[1.33rem] font-bold mt-[2.5rem] leading-[3.75rem]">
-            Withdraw
-          </div>
-        </div>
-      </div>
-      <!-- pc list -->
-      <div class="bg-[#1A1B1D] rounded-[1.25rem] w-full hidden lg:block">
-        <div
-          class="flex items-center py-[1.25rem] px-[2rem] text-[#999999] text-[0.88rem] border-b-[1px] border-[#272727]">
-          <span class="w-[8.8rem] text-left mr-8">Time</span>
-          <span class="flex-1 text-left mr-8">Amount</span>
-          <span class="w-[8rem] text-left mr-8">Fee</span>
-          <span class="flex-1 text-left mr-8">Transfer TXID</span>
-          <span class="flex-1 text-left mr-8">Receive TXID</span>
-          <span class="flex-1 text-left mr-8">Status</span>
-          <span class="w-[8rem] text-center">Operation </span>
-        </div>
-        <div v-if="!hlist.length">
+      <div v-infinite-scroll="loadhlist" :infinite-scroll-disabled="finished">
+        <!-- phone list -->
+        <div v-if="!hlist.length && !hlistloading" class="lg:hidden w-full bg-[#1A1B1D] rounded-[1.67rem] mb-8">
           <nodata />
         </div>
-        <div v-else
-          class="flex items-center py-[1.25rem] px-[2rem] text-[#ffffff] text-[0.88rem] border-b-[1px] border-[#272727]"
-          v-for="item in hlist" :key="item">
-          <span class="w-[8.8rem] text-left mr-8">2023.11.23 11:14:13</span>
-          <span class="flex-1 text-left mr-8">1,984.0 ORDI</span>
-          <span class="w-[8rem] text-left mr-8">16.2</span>
+        <div v-else class="lg:hidden w-full bg-[#1A1B1D] rounded-[1.67rem]" v-for="item in hlist" :key="item">
+          <div class="p-[1.25rem] border-b-[1px] border-[#272727] flex items-center">
+            <div class="relative">
+              <img src="../../../../assets/img/home/eth.png" alt="" class="w-[3.3rem] absolute left-0 top-0 z-[2]" />
+              <img src="../../../../assets/img/home/btc.png" alt=""
+                class="w-[3.3rem] absolute left-[2.3rem] top-0 z-[1]" />
+            </div>
+            <span class="text-white text-[1.67rem] flex-1 text-right font-bold">BITCOIN-Ethereum</span>
+          </div>
 
-          <div class="flex-1 flex items-center mr-8">
-            <img src="../../../../assets/img/home/btc.png" class="w-[1.5rem] mr-[0.38rem]" alt="" />
-            <span>3HxnEx*******TAddot</span>
+          <div class="px-[1.25rem] pb-[2.5rem] mb-[1.75rem]">
+            <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
+              <span class="text-[#999999]">Time</span>
+              <span class="text-white font-bold">2023.11.23 11:14:13</span>
+            </div>
+            <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
+              <span class="text-[#999999]">Amount</span>
+              <span class="text-white font-bold">123564</span>
+            </div>
+            <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
+              <span class="text-[#999999]">Fee</span>
+              <span class="text-white font-bold">13</span>
+            </div>
+            <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
+              <span class="text-[#999999]">Transfer TXID</span>
+              <span class="text-white font-bold">3HxnEx*******TAddot</span>
+            </div>
+            <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
+              <span class="text-[#999999]">Receive TXID</span>
+              <span class="text-white font-bold">3HxnEx*******TAddot</span>
+            </div>
+            <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
+              <span class="text-[#999999]">Status</span>
+              <div class="text-white font-bold flex items-center">
+                <img src="../../../../assets/img/cross/time.png" class="w-[1.3rem] mr-2" alt="" />
+                <span>Unconfirmed</span>
+              </div>
+            </div>
+            <div
+              class="w-full h-[3.75rem] rounded-full bg-[#F7931A] text-center text-white text-[1.33rem] font-bold mt-[2.5rem] leading-[3.75rem]">
+              Withdraw
+            </div>
           </div>
-          <div class="flex-1 flex items-center mr-8">
-            <img src="../../../../assets/img/home/eth.png" class="w-[1.5rem] mr-[0.38rem]" alt="" />
-            <span>3HxnEx*******TAddot</span>
-          </div>
-          <div class="flex-1 flex items-center mr-8">
-            <img src="../../../../assets/img/cross/success.png" class="w-[1rem] mr-[0.38rem]" alt="" />
-            <span>Complete</span>
-          </div>
-          <span
-            class="w-[8rem] h-[2.2rem] leading-[2.2rem] rounded-full bg-[#F7931A] text-[#ffffff] font-bold text-center cursor-pointer">withDraw</span>
         </div>
+        <!-- pc list -->
+        <div class="bg-[#1A1B1D] rounded-[1.25rem] w-full hidden lg:block">
+          <div
+            class="flex items-center py-[1.25rem] px-[2rem] text-[#999999] text-[0.88rem] border-b-[1px] border-[#272727]">
+            <span class="w-[8.8rem] text-left mr-8">Time</span>
+            <span class="flex-1 text-left mr-8">Amount</span>
+            <span class="w-[8rem] text-left mr-8">Fee</span>
+            <span class="flex-1 text-left mr-8">Transfer TXID</span>
+            <span class="flex-1 text-left mr-8">Receive TXID</span>
+            <span class="flex-1 text-left mr-8">Status</span>
+            <span class="w-[8rem] text-center">Operation </span>
+          </div>
+          <div v-if="!hlist.length && !hlistloading">
+            <nodata />
+          </div>
+          <div v-else
+            class="flex items-center py-[1.25rem] px-[2rem] text-[#ffffff] text-[0.88rem] border-b-[1px] border-[#272727]"
+            v-for="item in hlist" :key="item">
+            <span class="w-[8.8rem] text-left mr-8">2023.11.23 11:14:13</span>
+            <span class="flex-1 text-left mr-8">1,984.0 ORDI</span>
+            <span class="w-[8rem] text-left mr-8">16.2</span>
+
+            <div class="flex-1 flex items-center mr-8">
+              <img src="../../../../assets/img/home/btc.png" class="w-[1.5rem] mr-[0.38rem]" alt="" />
+              <span>3HxnEx*******TAddot</span>
+            </div>
+            <div class="flex-1 flex items-center mr-8">
+              <img src="../../../../assets/img/home/eth.png" class="w-[1.5rem] mr-[0.38rem]" alt="" />
+              <span>3HxnEx*******TAddot</span>
+            </div>
+            <div class="flex-1 flex items-center mr-8">
+              <img src="../../../../assets/img/cross/success.png" class="w-[1rem] mr-[0.38rem]" alt="" />
+              <span>Complete</span>
+            </div>
+            <span
+              class="w-[8rem] h-[2.2rem] leading-[2.2rem] rounded-full bg-[#F7931A] text-[#ffffff] font-bold text-center cursor-pointer">withDraw</span>
+          </div>
+        </div>
+
+        <div
+          class="flex items-end justify-center h-12 my-16 bg-transparent"
+          v-show="hlistloading"
+        >
+        <img src="../../../../assets/img/cross/loading.png" alt="" class="w-10 lg:w-12 refresh_balance"  />
       </div>
+      </div>
+
     </div>
     <!-- chooseToken -->
     <el-dialog v-model="showChooseToken" :show-close="false" custom-class="choosetokendialog"
@@ -246,7 +281,7 @@ import btcimg from "../../../../assets/img/home/btc.png";
 import ethimg from "../../../../assets/img/home/eth.png";
 import ORDIimg from "../../../../assets/img/token/ORDI.png";
 import nodata from "../../../../components/Nodata.vue";
-import { getHistory, preorder, crorder, getTokensBalance } from '../../../../api/api'
+import { getHistory, preorder, crorder, getTokensBalance,getFee } from '../../../../api/api'
 import { ElMessage } from "element-plus";
 import { showLoadingToast, closeToast } from "vant";
 export default {
@@ -255,6 +290,8 @@ export default {
     nodata,
   },
   data() {
+    const btcchain = { icon: btcimg, name: "Bitcoin", chainStr: 'btc' };
+    const ertchain = { icon: ethimg, name: "Ethereum", chainStr: 'eth' };
     return {
       openSelect1: false,
       openSelect2: false,
@@ -267,8 +304,8 @@ export default {
         { icon: btcimg, name: "Bitcoin" },
         { icon: ethimg, name: "Ethereum" },
       ],
-      chain1Data: { icon: btcimg, name: "Bitcoin" },
-      chain2Data: { icon: ethimg, name: "Ethereum" },
+      chain1Data: localStorage.getItem('WALLETTYPE') == 'mask' ? ertchain : btcchain,
+      chain2Data: localStorage.getItem('WALLETTYPE') == 'mask' ? btcchain : ertchain,
 
       // 当前所选的币所在的余额
       currentBalance: '--',
@@ -280,18 +317,26 @@ export default {
       transferAmountData: null,
       // 接收地址
       reciveAddr: '',
-
-      // 
+      // erc 输入数量
+      ercAmount: '',
+      // 费用数据
+      feeData: {
+        service: '',
+        receive: ''
+      },
+      // 列表数据
       hlist: [],
+      hlistloading: true,
+      finished: false,
       page: 1
     };
   },
   watch: {
     chain1Data() {
+      this.resetInfo();
       if (this.chain1Data.name == 'Bitcoin') {
         this.$store.commit('setMainChain', 1);
       } else {
-        console.log(1222)
         this.$store.commit('setMainChain', 2);
       }
     },
@@ -300,7 +345,27 @@ export default {
     },
     tokenData() {
       this.getCurrentTokenBalance()
-    }
+    },
+    "$store.state.userAddress"() {
+      if (this.$store.state.userAddress) {
+        this.getTransferList()
+      }
+    },
+    // 获取服务费
+    ercAmount() {
+      if(this.ercAmount && !isNaN(this.ercAmount*1)) {
+        this.$nextTick(()=>{
+          this.getFeeData();
+        })
+      }
+    },
+    transferAmountData() {
+      if(this.transferAmountData && this.chain1Data.name=='Bitcoin') {
+        this.$nextTick(()=>{
+          this.getFeeData();
+        })
+      }
+    },
   },
   mounted() {
     if (this.$store.state.userAddress) {
@@ -310,13 +375,65 @@ export default {
 
   },
   methods: {
+    // 重置数据
+    resetInfo() {
+      this.$store.commit('setUseraddress', '');
+      this.transferAmountData = null;
+      this.ercAmount = '';
+      this.feeData =  {
+        service: '',
+        receive: ''
+      },
+      this.hlist = [],
+      this.hlistloading = true,
+      this.finished = false,
+      this.page = 1
+    },
+    // 费用接口
+    async getFeeData() {
+      let amount = ''
+      if(this.chain1Data.name == 'Bitcoin') {
+        amount = this.transferAmountData.amount * 1;
+      } else {
+        amount = this.ercAmount * 1;
+      }
+      const res = await getFee({ from_chain: this.chain1Data.chainStr, to_chain: this.chain2Data.chainStr,amount})
+      if(res.data) {
+        this.feeData = res.data;
+      }
+    },
+    // 列表接口
+    loadhlist() {
+      if (this.hlistloading) {
+        return;
+      }
+      this.hlistloading = true;
+      setTimeout(() => {
+        this.getTransferList(true);
+      }, 1000);
+    },
     // 获取记录
     getTransferList(more) {
       getHistory({
         address: this.$store.state.userAddress,
-        page: this.page
+        page: more ? this.page + 1 : this.page
       }).then(res => {
-        console.log(res)
+        if (res.data) {
+          if (loadMore) {
+            this.page = this.page + 1;
+            this.hlist = this.hlist.concat(res.data);
+          } else {
+            this.hlist = res.data;
+          }
+          this.finished = res.data.length < 10;
+          this.hlistloading = false;
+        } else {
+          this.finished = true;
+        }
+      })
+      .catch(()=>{
+        this.finished = true;
+        this.hlistloading = false;
       })
     },
     // 获取当前余额
@@ -355,20 +472,26 @@ export default {
     },
     // 选主链
     selectedChain1(item) {
+      if(item.name == this.chain1Data.name) {
+        return 
+      }
       this.chain1Data = item;
       if (item.name == "Ethereum") {
-        this.chain2Data = { icon: btcimg, name: "Bitcoin" };
+        this.chain2Data = { icon: btcimg, name: "Bitcoin", chainStr: 'btc' };
       } else {
-        this.chain2Data = { icon: ethimg, name: "Ethereum" };
+        this.chain2Data = { icon: ethimg, name: "Ethereum", chainStr: 'eth' };
       }
     },
     // 选次链
     selectedChain2(item) {
+      if(item.name == this.chain2Data.name) {
+        return 
+      }
       this.chain2Data = item;
       if (item.name == "Ethereum") {
-        this.chain1Data = { icon: btcimg, name: "Bitcoin" };
+        this.chain1Data = { icon: btcimg, name: "Bitcoin", chainStr: 'btc' };
       } else {
-        this.chain1Data = { icon: ethimg, name: "Ethereum" };
+        this.chain1Data = { icon: ethimg, name: "Ethereum", chainStr: 'eth' };
       }
     },
     //选择金额
@@ -379,20 +502,28 @@ export default {
       };
     },
     // 自定添加 需要弹窗提示用户
-    customAdd() {
-      ElMessage.warning('请前往钱包tansfer相应数量');
+    async customAdd() {
+      const type = localStorage.getItem('WALLETTYPE');
+      if (type == 'sat') {
+        ElNotification.warning('please add inscription in unisat wallet');
+      } else {
+        console.log(this.tokenData.name)
+        const res = await okxwallet.bitcoin.inscribe({ type: 51, from: this.$store.state.userAddress, tick: this.tokenData.name.toLocaleLowerCase() })
+        this.refreshBalance();
+      }
+
     },
     // 刷新余额，主要目的是 刷新用户的铭文
     async refreshBalance() {
       this.refreshLoading = true;
       const { userAddress, mainChain } = this.$store.state
       try {
-        const res = await getTokensBalance({ chain: mainChain, address: userAddress, token: 'ordi,TTIN,sats,onfi' });
-        const data = res.data.map(item => ({ balance: item.availableBalance || 0, name: item.ticker.toLocaleUpperCase(), transferableList: item.transferableList }));
+        const res = await getTokensBalance({ chain: mainChain, address: userAddress, token: 'ordi,RATS,sats,onfi' });
+        const data = res.data.map(item => ({ balance: item.availableBalance || 0, name: item.ticker.toLocaleUpperCase(), transferableList: item.transferableList, transferableBalance: item.transferableBalance }));
         this.$store.commit('setBalance', data);
         this.refreshLoading = false;
       } catch (error) {
-        const data = [{ name: 'ORDI', balance: 0, transferableList: [] }, { name: 'TTIN', balance: 0, transferableList: [] }, { name: 'SATS', balance: 0, transferableList: [] }, { name: 'ONFI', balance: 0, transferableList: [] }]
+        const data = [{ name: 'ORDI', balance: 0, transferableList: [] }, { name: 'RATS', balance: 0, transferableList: [] }, { name: 'SATS', balance: 0, transferableList: [] }, { name: 'ONFI', balance: 0, transferableList: [], transferableBalance: 0 }]
         this.$store.commit('setBalance', data)
         this.refreshLoading = false;
       }
@@ -400,8 +531,12 @@ export default {
     // 调用跨链
     async transferFn() {
 
-      if (!this.transferAmountData) {
-        ElMessage.warning('请选择数量进行转账');
+      // if (!this.transferAmountData) {
+      //   ElNotification.warning('Please Choose an inscription');
+      //   return
+      // }
+      if (this.reciveAddr == '') {
+        ElNotification.warning('Please input recive address');
         return
       }
       // loading 开始
@@ -422,10 +557,10 @@ export default {
     async unisatTransfer() {
       try {
         const res = await preorder({
-          from_chain: this.chain1Data.name,
-          to_chain: this.chain2Data.name,
+          from_chain: this.chain1Data.chainStr,
+          to_chain: this.chain2Data.chainStr,
           from_address: this.$store.state.userAddress,
-          to_address: '0x9B861f4B0D3C7E9977801578C91F0855a9199D78',
+          to_address: this.reciveAddr,
           token: this.tokenData.name,
           amount: this.transferAmountData.amount,
           inscriptionId: this.transferAmountData.inId
@@ -436,19 +571,7 @@ export default {
         console.log('signPsbt返回数据:', hex)
         const txid = await window.unisat.pushPsbt(hex)
         console.log('pushPsbt返回数据:', txid)
-        const res1 = await crorder({
-          txid,
-          from_chain: this.chain1Data.name,
-          to_chain: this.chain2Data.name,
-          from_address: this.$store.state.userAddress,
-          to_address: '0x9B861f4B0D3C7E9977801578C91F0855a9199D78',
-          token: this.tokenData.name,
-          amount: this.transferAmountData.amount,
-          inscriptionId: this.transferAmountData.inId
-        });
-        console.log('createorder返回数据:', res1)
-        ElNotification.success('数据提交成功！')
-        closeToast();
+        this.createOrder(txid,data.order_id)
       } catch (error) {
         console.log(error)
         closeToast();
@@ -460,37 +583,28 @@ export default {
     async okxTransferToerc() {
       try {
         const res = await preorder({
-          from_chain: this.chain1Data.name,
-          to_chain: this.chain2Data.name,
+          from_chain: this.chain1Data.chainStr,
+          to_chain: this.chain2Data.chainStr,
           from_address: this.$store.state.userAddress,
-          to_address: '0x9B861f4B0D3C7E9977801578C91F0855a9199D78',
+          to_address: this.reciveAddr,
           token: this.tokenData.name,
-          amount: this.transferAmountData.amount,
+          amount: this.currentInscriptList.amount,
           inscriptionId: this.transferAmountData.inId
         });
         console.log('preorder返回数据:', res)
-        const data = res.data;
-        const hex = await window.okxwallet.bitcoin.sendPsbt(data.psbt_hex, data.toSignInputs);
-        console.log('signPsbt返回数据:', hex)
-        const txid = await window.okxwallet.bitcoin.pushPsbt(hex)
-        console.log('pushPsbt返回数据:', txid)
-        const res1 = await crorder({
-          txid,
-          from_chain: this.chain1Data.name,
-          to_chain: this.chain2Data.name,
-          from_address: this.$store.state.userAddress,
-          to_address: '0x9B861f4B0D3C7E9977801578C91F0855a9199D78',
-          token: this.tokenData.name,
-          amount: this.transferAmountData.amount,
-          inscriptionId: this.transferAmountData.inId
+        let txData = await window.okxwallet.bitcoin.transferNft({
+          from: this.$store.state.userAddress,
+          to: res.data.bridgeAddress,
+          data: this.transferAmountData.inId,
+          type: 26
         });
-        console.log('createorder返回数据:', res1)
-        ElNotification.success('数据提交成功！')
-        closeToast();
+        console.log('transferNft返回数据:', txData)
+        this.createOrder(txData.txhash,res.data.order_id);
+
       } catch (error) {
         console.log(error)
         closeToast();
-        ElNotification.error("跨链失败,请重试！");
+        ElNotification.error("error,try again");
       }
     },
     async okxTransferTobtc() {
@@ -498,6 +612,31 @@ export default {
       // web3.js 调用来转
       alert('需要调用合约，还没有写')
     },
+    // 往后端传递 交易id 
+    async createOrder(txid,order_id) {
+      try {
+        const res1 = await crorder({
+          txid,
+          order_id,
+          from_chain: this.chain1Data.chainStr,
+          to_chain: this.chain2Data.chainStr,
+          from_address: this.$store.state.userAddress,
+          to_address: this.reciveAddr,
+          token: this.tokenData.name,
+          amount: this.transferAmountData.amount,
+          inscriptionId: this.transferAmountData.inId
+        });
+        console.log('createorder返回数据:', res1)
+        ElNotification.success('create success')
+        closeToast();
+        this.getTransferList();
+      } catch (error) {
+        setTimeout(() => {
+          this.createOrder(txid);
+        }, 2000);
+      }
+
+    }
   },
 };
 </script>

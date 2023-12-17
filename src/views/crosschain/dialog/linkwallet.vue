@@ -33,6 +33,7 @@
       </div>
       <div
         @click="link('okx')"
+        v-if="$store.state.mainChain==1"
         class="w-[9rem] h-[9rem] lg:w-[8rem] lg:h-[8rem] rounded-[1.5rem] lg:rounded-[1rem] flex flex-col items-center justify-center mr-[1.6rem] lg:mr-[1.87rem] bg-[#212223] cursor-pointer"
       >
         <img
@@ -45,13 +46,29 @@
           >OKX Wallet</span
         >
       </div>
+      <div
+        @click="link('metamask')"
+        v-if="$store.state.mainChain==2"
+        class="w-[9rem] h-[9rem] lg:w-[8rem] lg:h-[8rem] rounded-[1.5rem] lg:rounded-[1rem] flex flex-col items-center justify-center mr-[1.6rem] lg:mr-[1.87rem] bg-[#212223] cursor-pointer"
+      >
+        <img
+          src="../../../assets/img/cross/mask.png"
+          class="w-[3rem] lg:w-[2.5rem]"
+          alt=""
+        />
+        <span
+          class="mt-[0.33rem] text-white text-[1.2rem] font-bold lg:text-[1rem]"
+          >MetaMask</span
+        >
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import utils from "../../../utils/utils";
-import { getTokensBalance } from './../../../api/api'
+import { getTokensBalance } from './../../../api/api';
+import web3 from 'web3'
 export default {
   data() {
     return {};
@@ -61,8 +78,10 @@ export default {
     link(type) {
       if (type == "sat") {
         this.linkSat();
-      } else {
+      } else if(type=='okx') {
         this.linkOkx();
+      } else {
+        this.linkMask();
       }
     },
     async linkSat() {
@@ -102,8 +121,22 @@ export default {
         utils.accountChange();
       } catch (error) {}
     },
+    async linkMask() {
+      const data = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3Object = new web3(window.ethereum);
+      const chainId = await web3Object.eth.getChainId();
+      if (chainId != 1) {
+        ElNotification.error("Please switch ETH network");
+        return 
+      }
+      localStorage.setItem('WALLETTYPE','mask');
+      this.$store.commit('setWeb3js',web3Object);
+      this.$store.commit("setUseraddress", data[0]);
+      this.$emit("close");
+      utils.accountChange();
+    },
     async getBalance(address) {
-      const res = getTokensBalance({address,token: 'ordi,TTIN,sats,onfi' });
+      const res = getTokensBalance({address,token: 'ordi,RATS,sats,onfi' });
       console.log(res)
       this.$store.commit()
     },

@@ -98,7 +98,7 @@ const clickCollect = async (item) => {
   const addr = localStorage.getItem("userAddr");
   const token = localStorage.getItem(addr);
   if (!token) {
-    ElMessage.error("Please login");
+    ElNotification.error("Please login");
     return;
   }
   await collectNFT({ id: item.id });
@@ -108,7 +108,7 @@ const goDetail = (item) => {
   const addr = localStorage.getItem("userAddr");
   const token = localStorage.getItem(addr);
   if (!token) {
-    ElMessage.error("Please login");
+    ElNotification.error("Please login");
     return;
   }
   console.log(route);
