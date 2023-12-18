@@ -35,7 +35,7 @@
               <div class="text-white lg:text-[0.88rem] text-[1.1rem]">{{ feeInfo.normal }} Sats/vb</div>
             </div>
             <!--  -->
-            <div class="lg:mx-2 flex-1 min-w-[40%] max-w-[49%] lg:min-w-0 flex flex-col items-center justify-center h-[4.2rem] border border-[#272727] rounded-[1rem] cursor-pointer" :class="{'border-[#F7931A]': selectedFee == 2}" @click="selectFee(2)">
+            <div class="ml-2 lg:mx-2 flex-1 min-w-[40%] max-w-[49%] lg:min-w-0 flex flex-col items-center justify-center h-[4.2rem] border border-[#272727] rounded-[1rem] cursor-pointer" :class="{'border-[#F7931A]': selectedFee == 2}" @click="selectFee(2)">
               <div class="flex items-center justify-center">
                 <img src="../../../assets/img/cross/speed2.png" alt="" class="w-[0.75rem] mr-1"/>
                 <span class="text-white lg:text-[0.88rem] text-[1.1rem]">Fast</span>
@@ -43,7 +43,7 @@
               <div class="text-white lg:text-[0.88rem] text-[1.1rem]">{{ feeInfo.fast }} Sats/vb</div>
             </div>
             <!--  -->
-            <div class="flex-1 min-w-[40%] max-w-[49%] lg:min-w-0 flex flex-col items-center justify-center h-[4.2rem] border border-[#272727] rounded-[1rem] cursor-pointer" :class="{'border-[#F7931A]': selectedFee == 3}" @click="selectFee(3)">
+            <div class=" mt-3 lg:mt-0 flex-1 min-w-[40%] max-w-[49%] lg:min-w-0 flex flex-col items-center justify-center h-[4.2rem] border border-[#272727] rounded-[1rem] cursor-pointer" :class="{'border-[#F7931A]': selectedFee == 3}" @click="selectFee(3)">
               <div class="flex items-center justify-center">
                 <img src="../../../assets/img/cross/speed3.png" alt="" class="w-[0.75rem] mr-1"/>
                 <span class="text-white lg:text-[0.88rem] text-[1.1rem]">Rapid</span>
