@@ -200,13 +200,13 @@ export default {
       const data = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const web3Object = new web3(window.ethereum);
       const chainId = await web3Object.eth.getChainId();
-      if (chainId != 1) {
-        ElNotification.error("Please switch ETH network");
-        return 
-      }
+      // if (chainId != 1) {
+      //   ElNotification.error("Please switch ETH network");
+      //   return 
+      // }
       localStorage.setItem('WALLETTYPE','mask');
       this.$store.commit('setWeb3js',web3Object);
-      this.$store.commit("setUseraddress", data[0]);
+      this.$store.commit("setUseraddress", web3.utils.toChecksumAddress(data[0]));
       this.$emit("close");
       utils.accountChange();
     },

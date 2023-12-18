@@ -33,13 +33,13 @@ axios.interceptors.response.use(
       const addr = localStorage.getItem('userAddr');
       localStorage.removeItem(addr);
       localStorage.removeItem('userAddr')
-      ElMessageBox({
-        message: 'Please login',
-        closeOnClickModal: false,
-      })
-        .then(() => {
-          router.replace('/app/home')
-        })
+      // ElMessageBox({
+      //   message: 'Please login',
+      //   closeOnClickModal: false,
+      // })
+      //   .then(() => {
+      //     router.replace('/app/home')
+      //   })
       return response
     }
     return response;
@@ -53,10 +53,10 @@ axios.interceptors.response.use(
 
         router.replace('/app/home')
       }
-      ElMessage({
-        message: error.response.data.msg,
-        type: 'error',
-      })
+      // ElMessage({
+      //   message: error.response.data.msg,
+      //   type: 'error',
+      // })
     }
     return Promise.reject(error)
   }

@@ -139,8 +139,7 @@
           <div
             class="flex flex-col lg:flex-row items-start lg:items-center justify-between text-[1.17rem] lg:text-[0.88rem] mt-[0.83rem] lg:mt-[0.66rem] text-[#59595A]">
             <span>Service fees: <span class="text-white">{{ feeData.fee}}</span></span>
-            <span v-show="chain1Data.name == 'Ethereum'">Balance: <span class="text-white">{{ currentBalance
-            }}</span></span>
+            <span></span>
           </div>
           <div
             class="w-full flex items-center h-[4.17rem] lg:h-[3.13rem] border border-[#272727] rounded-[1rem] px-[1.25rem] lg:px-[0.94rem] mt-[1.67rem] lg:mt-[1.25rem]">
@@ -200,6 +199,10 @@
               <span class="text-white font-bold">{{ item.fee || '--' }}</span>
             </div>
             <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
+              <span class="text-[#999999]">Txid</span>
+              <span class="text-white font-bold" @click="copytxid(item)">{{ item.txid ? (item.txid.slice(0,4)+'***'+ item.txid.slice(-4)) : '--'}}</span>
+            </div>
+            <div class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]">
               <span class="text-[#999999]">Transfer Address</span>
               <span class="text-white font-bold">{{ item.from_address.slice(0,4)+'***'+ item.from_address.slice(-4)}}</span>
             </div>
@@ -214,10 +217,10 @@
                 <span>{{ item.status }}</span>
               </div>
             </div>
-            <div
+            <!-- <div
               class="w-full h-[3.75rem] rounded-full bg-[#F7931A] text-center text-white text-[1.33rem] font-bold mt-[2.5rem] leading-[3.75rem]">
               Withdraw
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -228,6 +231,7 @@
             <span class="w-[8.8rem] text-left mr-8">Time</span>
             <span class="flex-1 text-left mr-8">Amount</span>
             <span class="w-[8rem] text-left mr-8">Fee</span>
+            <span class="flex-1 text-left mr-8">Txid</span>
             <span class="flex-1 text-left mr-8">Transfer Address</span>
             <span class="flex-1 text-left mr-8">Receive Address</span>
             <span class="flex-1 text-right">Status</span>
@@ -243,7 +247,10 @@
               <span class="w-[8.8rem] text-left mr-8">{{ new Date(item.create_time*1000).toLocaleString() }}</span>
               <span class="flex-1 text-left mr-8">{{ (item.amount*1).toFixed(2) }} {{ item.token }}</span>
               <span class="w-[8rem] text-left mr-8">{{ item.fee || '--' }}</span>
-
+              <div class="flex-1 flex items-center mr-8">
+                <span class=" cursor-pointer" @click="copytxid(item)">{{ item.txid ? (item.txid.slice(0,4)+'***'+ item.txid.slice(-4)) : '--'}}</span>
+                <!-- <img src="../../../../assets/img/cross/copy.png" class="w-[1rem] ml-[0.38rem]" alt="" /> -->
+              </div>
               <div class="flex-1 flex items-center mr-8">
                 <img :src="item.from_chain=='btc'?hlistChainImg.btcimg:hlistChainImg.ethimg" class="w-[1.5rem] mr-[0.38rem]" alt="" />
                 <span>{{ item.from_address.slice(0,4)+'***'+ item.from_address.slice(-4)}}</span>
@@ -274,13 +281,20 @@
     <!-- chooseToken -->
     <el-dialog v-model="showChooseToken" :show-close="false" custom-class="choosetokendialog"
       :close-on-click-modal="false">
-      <choosetoken @close="showChooseToken = false" :tokenName="tokenData.name" @choose="selected" />
+      <choosetoken @close="showChooseToken = false" :tokenName="tokenData.name" @choose="selected"  v-if="showChooseToken"/>
+    </el-dialog>
+    <!-- btc to erc fee unisat -->
+    <el-dialog v-model="showUnisatChoosefee" :show-close="false" custom-class="choosetokendialog"
+      :close-on-click-modal="false"
+    >
+      <chooseunisatfee  @close="closeChooseFee" :info="{amount:transferAmountData.amount,reciveAddr}" :feeData="feeData" v-if="showUnisatChoosefee" @confirm="unisatfeetransfer"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import choosetoken from "../../dialog/choosetoken.vue";
+import chooseunisatfee from "../../dialog/chooseunisatfee.vue";
 import btcimg from "../../../../assets/img/home/btc.png";
 import ethimg from "../../../../assets/img/home/eth.png";
 import ORDIimg from "../../../../assets/img/token/ORDI.png";
@@ -290,11 +304,14 @@ import verifyImg from "../../../../assets/img/cross/time.png";
 import { getHistory, preorder, crorder, getTokensBalance,getFee } from '../../../../api/api'
 import { ElMessage } from "element-plus";
 import { showLoadingToast, closeToast } from "vant";
-
+import web3 from 'web3';
+import abi from './../../../../assets/js/XRC20abi';
+import utils from "../../../../utils/utils";
 export default {
   components: {
     choosetoken,
     nodata,
+    chooseunisatfee
   },
   data() {
     const btcchain = { icon: btcimg, name: "Bitcoin", chainStr: 'btc' };
@@ -331,6 +348,9 @@ export default {
         service: '',
         receive: ''
       },
+      // unisat跨链 选择手续费
+      showUnisatChoosefee:false,
+      feeData: {},
       // 列表数据
       hlist: [],
       hlistChainImg: {
@@ -390,6 +410,18 @@ export default {
 
   },
   methods: {
+    // 关闭unisat选择手续费
+    closeChooseFee() {
+      this.showUnisatChoosefee = false;
+    },
+    // 复制
+    copytxid(item) {
+      if(!item.txid) {
+        return 
+      }
+      utils.copy(item.txid);
+      ElNotification.success('Copy success')
+    },
     // 重置数据
     resetInfo() {
       this.$store.commit('setUseraddress', '');
@@ -535,12 +567,18 @@ export default {
       this.refreshLoading = true;
       const { userAddress, mainChain } = this.$store.state
       try {
-        const res = await getTokensBalance({ chain: mainChain, address: userAddress, token: 'ordi,RATS,sats,onfi' });
-        const data = res.data.map(item => ({ balance: item.availableBalance || 0, name: item.ticker.toLocaleUpperCase(), transferableList: item.transferableList, transferableBalance: item.transferableBalance }));
+        const res = await getTokensBalance({ chain: mainChain, address: userAddress, token: 'ordi,RATS,TTIN,onfi' });
+        const data = res.data.map(item => ({
+            balance: item.availableBalance || item.balance || 0, 
+            name: item.ticker.toLocaleUpperCase(), 
+            transferableList: item.transferableList, 
+            transferableBalance: item.transferableBalance 
+        }));
+        console.log('刷新用户的铭文',data)
         this.$store.commit('setBalance', data);
         this.refreshLoading = false;
       } catch (error) {
-        const data = [{ name: 'ORDI', balance: 0, transferableList: [] }, { name: 'RATS', balance: 0, transferableList: [] }, { name: 'SATS', balance: 0, transferableList: [] }, { name: 'ONFI', balance: 0, transferableList: [], transferableBalance: 0 }]
+        const data = [{ name: 'ORDI', balance: 0, transferableList: [] }, { name: 'RATS', balance: 0, transferableList: [] }, { name: 'TTIN', balance: 0, transferableList: [] }, { name: 'ONFI', balance: 0, transferableList: [], transferableBalance: 0 }]
         this.$store.commit('setBalance', data)
         this.refreshLoading = false;
       }
@@ -588,17 +626,31 @@ export default {
         });
         console.log('preorder返回数据:', res)
         const data = res.data;
-        const hex = await window.unisat.signPsbt(data.psbt_hex, data.toSignInputs);
-        console.log('signPsbt返回数据:', hex)
-        const txid = await window.unisat.pushPsbt(hex)
-        console.log('pushPsbt返回数据:', txid)
-        this.createOrder(txid,data.order_id)
+        if(data) {
+          closeToast()
+          this.showUnisatChoosefee = true;
+          this.feeData = data;
+        }
       } catch (error) {
         console.log(error)
         closeToast();
         ElNotification.error("跨链失败,请重试！");
       }
-
+    },
+    async unisatfeetransfer(data) {
+      this.showUnisatChoosefee = false;
+      showLoadingToast({ duration: 0 });
+      try {
+        let {txid} = await window.unisat.sendInscription(
+          data.bridgeAddress,
+          this.transferAmountData.inId,
+          {feeRate:data.fee}
+        );
+        this.createOrder(txid,data.order_id)
+      } catch (error) {
+        closeToast();
+        ElNotification.error("跨链失败,请重试！");
+      }
     },
     // okx btc to  erc
     async okxTransferToerc() {
@@ -628,6 +680,7 @@ export default {
       }
     },
     async transferTobtc() {
+      try {
       const res = await preorder({
           from_chain: this.chain1Data.chainStr,
           to_chain: this.chain2Data.chainStr,
@@ -637,12 +690,26 @@ export default {
           amount: this.ercAmount *1,
           inscriptionId: 'xxx'
         });
-        console.log('zzzzzzzz',res)
+        const web3js = new web3(window.ethereum);
+        const contract = new web3js.eth.Contract(
+          abi.coinAbi,
+          res.data.tx.to,
+          { from: this.$store.state.userAddress }
+        );
+      const hash = await contract.methods.burnWithPayment(res.data.burn_amount+'').send({ from: this.$store.state.userAddress });
+      console.log('调用来转',hash)
       // web3.js 调用来转
       // alert('需要调用合约，还没有写')
+      this.createOrder(hash.transactionHash,res.data.order_id,true);
+    } catch (error) {
+        console.log(error)
+        closeToast();
+        ElNotification.error("error,try again");
+      }
     },
     // 往后端传递 交易id 
-    async createOrder(txid,order_id) {
+    async createOrder(txid,order_id,isMask) {
+      console.log(txid,order_id)
       try {
         const res1 = await crorder({
           txid,
@@ -652,13 +719,16 @@ export default {
           from_address: this.$store.state.userAddress,
           to_address: this.reciveAddr,
           token: this.tokenData.name,
-          amount: this.transferAmountData.amount,
-          inscriptionId: this.transferAmountData.inId
+          amount: isMask ? this.ercAmount *1 : this.transferAmountData.amount,
+          inscriptionId: isMask ? 'xxx' :this.transferAmountData.inId
         });
         console.log('createorder返回数据:', res1)
         ElNotification.success('create success')
         closeToast();
-        this.getTransferList();
+        this.page = 1;
+        this.$nextTick(()=>{
+          this.getTransferList();
+        })
       } catch (error) {
         setTimeout(() => {
           this.createOrder(txid,order_id);

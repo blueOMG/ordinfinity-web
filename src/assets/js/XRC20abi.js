@@ -64,6 +64,19 @@ const coinAbi = [
     "stateMutability": "view",
     "type": "function"
   },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnWithPayment",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
 ]
 export default {
   coinAbi,

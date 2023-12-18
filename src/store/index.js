@@ -5,7 +5,7 @@ import Utils from '@/utils/utils'
 import {getTokensBalance} from './../api/api'
 const state = {
   userAddress: '',
-  tokenBalance: [{name:'ORDI',balance: 0,transferableList:[],transferableBalance:0},{name:'RATS',balance: 0,transferableList:[],transferableBalance:0},{name:'SATS',balance: 0,transferableList:[],transferableBalance:0},{name:'ONFI',balance: 0,transferableList:[],transferableBalance:0}],
+  tokenBalance: [{name:'ORDI',balance: 0,transferableList:[],transferableBalance:0},{name:'RATS',balance: 0,transferableList:[],transferableBalance:0},{name:'TTIN',balance: 0,transferableList:[],transferableBalance:0},{name:'ONFI',balance: 0,transferableList:[],transferableBalance:0}],
   mainChain: localStorage.getItem('WALLETTYPE') == 'mask' ? 2 :1, // 1btc 2erc
   web3js: null,
 };
@@ -18,6 +18,7 @@ const store = createStore({
       store.dispatch('getBalance',data);
     },
     setBalance(state, data) {
+      console.log('setbbb@@@@',data)
       state.tokenBalance = data
     },
     setMainChain(state, data) {
@@ -31,11 +32,19 @@ const store = createStore({
   actions: {
     async getBalance(context,address) {
       try {
-        const res = await getTokensBalance({chain: context.state.mainChain,address,token: 'ordi,RATS,sats,onfi' });
-        const data =res.data.map(item=> ({balance: item.availableBalance || 0, name: item.ticker.toLocaleUpperCase(),transferableList: item.transferableList, transferableBalance:item.transferableBalance}));
+        const res = await getTokensBalance({chain: context.state.mainChain,address,token: 'ordi,RATS,TTIN,onfi' });
+        console.log('transferableBalance',res)
+        const data = res.data.map(item=> ({
+          balance: item.availableBalance || item.balance || 0, 
+          name: (item.ticker || item.tick).toLocaleUpperCase(),
+          transferableList: item.transferableList, 
+          transferableBalance:item.transferableBalance
+        }));
+        console.log('transferableBalance',data)
         context.commit('setBalance',data)
       } catch (error) {
-        const data = [{name:'ORDI',balance: 0,transferableList:[],transferableBalance:0},{name:'RATS',balance: 0,transferableList:[],transferableBalance:0},{name:'SATS',balance: 0,transferableList:[],transferableBalance:0},{name:'ONFI',balance: 0,transferableList:[],transferableBalance:0}]
+        console.log('error',error)
+        const data = [{name:'ORDI',balance: 0,transferableList:[],transferableBalance:0},{name:'RATS',balance: 0,transferableList:[],transferableBalance:0},{name:'TTIN',balance: 0,transferableList:[],transferableBalance:0},{name:'ONFI',balance: 0,transferableList:[],transferableBalance:0}]
         context.commit('setBalance',data)
       }
       

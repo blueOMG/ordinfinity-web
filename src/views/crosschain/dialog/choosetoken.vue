@@ -58,7 +58,7 @@ export default {
       tokenList: [
         { balance: '--', icon: ORDI, name: "ORDI" },
         { balance: '--', icon: RATS, name: "RATS" },
-        { balance: '--', icon: SATS, name: "SATS" },
+        { balance: '--', icon: SATS, name: "TTIN" },
         { balance: '--', icon: ONFI, name: "ONFI" },
       ],
     };
@@ -75,7 +75,7 @@ export default {
         console.log(res)
         acc.push({
           ...item,
-          balance: (res.balance*1) +  (res.transferableBalance*1)
+          balance: (res.balance*1) +  ((res.transferableBalance || 0)*1)
         });
         return acc;
       },[]);

@@ -9,6 +9,6 @@ export const getConfig = () => get("/config/info");
  */
 export const preorder = (obj) => post("/create/pre_order", obj);
 export const crorder = (obj) => post("/create/order", obj);
-export const getTokensBalance = (obj) => get(`/balance/${obj.chain==1?'btc':'erc'}/${obj.address}/${obj.token}`);
+export const getTokensBalance = (obj) => get(`/balance/${obj.chain==1?'btc':'eth'}/${obj.address}/${obj.token}`);
 export const getHistory = (obj)=> get(`/orders/${obj.address}/${obj.page}`);
 export const getFee = (obj) => post("/service/fee", obj);
