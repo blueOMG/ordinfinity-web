@@ -562,6 +562,7 @@ import chooseunisatfee from "../../dialog/chooseunisatfee.vue";
 import btcimg from "../../../../assets/img/home/btc.png";
 import ethimg from "../../../../assets/img/home/eth.png";
 import ORDIimg from "../../../../assets/img/token/ORDI.png";
+import ONFIimg from "../../../../assets/img/token/ONFI.png";
 import nodata from "../../../../components/Nodata.vue";
 import successImg from "../../../../assets/img/cross/success.png";
 import verifyImg from "../../../../assets/img/cross/time.png";
@@ -591,8 +592,8 @@ export default {
       openSelect2: false,
       showChooseToken: false,
       tokenData: {
-        icon: ORDIimg,
-        name: "ORDI",
+        icon: ONFIimg,
+        name: "ONFI",
       },
       chainList: [
         { icon: btcimg, name: "Bitcoin" },
@@ -651,6 +652,12 @@ export default {
       this.getCurrentTokenBalance();
     },
     tokenData() {
+      this.transferAmountData = null;
+      this.ercAmount = "";
+      this.feeData = {
+        service: "",
+        receive: "",
+      };
       this.getCurrentTokenBalance();
     },
     "$store.state.userAddress"() {

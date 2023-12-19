@@ -26,6 +26,7 @@
           v-for="item in tokenList"
           :key="item.name"
           :class="{ 'bg-[#212223]': tokenName == item.name }"
+          :style="(item.name=='RATS' || item.name == 'SATS') && {cursor: 'not-allowed'}" 
           @click="select(item)"
         >
           <img
@@ -56,10 +57,10 @@ export default {
   data() {
     return {
       tokenList: [
+        { balance: '--', icon: ONFI, name: "ONFI" },
         { balance: '--', icon: ORDI, name: "ORDI" },
         { balance: '--', icon: RATS, name: "RATS" },
         { balance: '--', icon: SATS, name: "SATS" },
-        { balance: '--', icon: ONFI, name: "ONFI" },
       ],
     };
   },
@@ -82,6 +83,9 @@ export default {
       this.tokenList = data;
     },
     select(item) {
+      if(item.name=='RATS' || item.name == 'SATS') { // test
+        return 
+      }
       this.$emit("choose", item);
       this.$emit("close");
     },
