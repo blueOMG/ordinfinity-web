@@ -39,7 +39,7 @@
           }}</span>
           <span
             class="flex-1 text-right text-[1.33rem] lg:text-[1rem] text-white font-bold"
-            >{{ item.balance }}</span
+            >{{ dealBalance(item.balance) }}</span
           >
         </div>
       </div>
@@ -64,6 +64,11 @@ export default {
       ],
     };
   },
+  watch: {
+    "$store.state.tokenBalance"() {
+      this.getBalance();
+    }
+  },
   mounted() {
     this.getBalance();
   },
@@ -81,6 +86,23 @@ export default {
         return acc;
       },[]);
       this.tokenList = data;
+    },
+    dealBalance(val) {
+      console.log('dealBalance',typeof val)
+      const data = val + '';
+      if(data.includes('.')) {
+        const array = data.split('.');
+        let second = ''
+        if(array[1].length > 3) {
+          second = array[1].slice(0,4)
+        } else {
+          const addZeroNum = 4 - array[1].length;
+          second = array[1] + new Array(2).fill(0).join('');
+        }
+        return `${array[0]}.${second}`
+      } else {
+        return data +'.0000'
+      }
     },
     select(item) {
       if(item.name=='RATS' || item.name == 'SATS') { // test

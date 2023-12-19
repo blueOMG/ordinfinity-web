@@ -197,13 +197,25 @@ export default {
       }
     },
     async linkMask() {
+      window.ethereum.on('chainChanged', () => window.location.reload());
       const data = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const web3Object = new web3(window.ethereum);
       const chainId = await web3Object.eth.getChainId();
-      // if (chainId != 1) {
-      //   ElNotification.error("Please switch ETH network");
-      //   return 
-      // }
+      if (chainId != 11155111) { // 网路判断
+        try {
+          await await window.ethereum.request({
+            "method": "wallet_switchEthereumChain",
+            "params": [
+              {
+                "chainId": "0xaa36a7"
+              }
+            ]
+          });
+        } catch (addError) {
+        // handle "add" error
+        }
+        return 
+      }
       localStorage.setItem('WALLETTYPE','mask');
       this.$store.commit('setWeb3js',web3Object);
       this.$store.commit("setUseraddress", web3.utils.toChecksumAddress(data[0]));

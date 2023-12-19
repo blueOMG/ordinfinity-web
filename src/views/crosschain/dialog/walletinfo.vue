@@ -53,7 +53,8 @@ export default {
         okxwallet.disconnect();
       }
       
-      this.$store.commit('setUseraddress','')
+      this.$store.commit('setUseraddress','');
+      this.$store.commit('setBalance',[{name:'ORDI',balance: 0,transferableList:[],transferableBalance:0},{name:'RATS',balance: 0,transferableList:[],transferableBalance:0},{name:'SATS',balance: 0,transferableList:[],transferableBalance:0},{name:'ONFI',balance: 0,transferableList:[],transferableBalance:0}],)
       localStorage.clear();
       this.$emit('close')
     }

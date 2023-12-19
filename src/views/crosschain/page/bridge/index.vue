@@ -44,7 +44,7 @@
             >
               <span>From</span>
               <span v-show="chain1Data.name == 'Ethereum'"
-                >Balance: {{ currentBalance }}</span
+                >Balance: {{ dealBalance(currentBalance) }}</span
               >
             </div>
             <div
@@ -264,7 +264,7 @@
           >
             <input
               type="text"
-              v-model="reciveAddr"
+              v-model.trim="reciveAddr"
               class="w-full text-[1.33rem] lg:text-[1rem] text-white bg-transparent outline-none border-none"
               :placeholder="`Enter ${
                 chain1Data.name == 'Bitcoin' ? 'ERC-20' : 'BRC-20'
@@ -357,6 +357,14 @@
               <div
                 class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]"
               >
+                <span class="text-[#999999]">Order ID</span>
+                <span class="text-white font-bold">
+                  {{ item.id }}
+                </span>
+              </div>
+              <div
+                class="flex items-center justify-between text-[1.17rem] mt-[1.67rem]"
+              >
                 <span class="text-[#999999]">Amount</span>
                 <span class="text-white font-bold"
                   >{{ (item.amount * 1).toFixed(2) }} {{ item.token }}</span
@@ -427,7 +435,8 @@
           <div
             class="flex items-center py-[1.25rem] px-[2rem] text-[#999999] text-[0.88rem] border-b-[1px] border-[#272727]"
           >
-            <span class="w-[8.8rem] text-left mr-8">Time</span>
+            <span class="w-[9rem] text-left mr-8">Time</span>
+            <span class="w-[4rem] text-left mr-8">Order ID</span>
             <span class="flex-1 text-left mr-8">Amount</span>
             <span class="w-[8rem] text-left mr-8">Fee</span>
             <span class="flex-1 text-left mr-8">Txid</span>
@@ -445,8 +454,11 @@
               v-for="item in hlist"
               :key="item"
             >
-              <span class="w-[8.8rem] text-left mr-8">{{
+              <span class="w-[9rem] text-left mr-8">{{
                 new Date(item.create_time * 1000).toLocaleString()
+              }}</span>
+              <span class="w-[4rem] text-left mr-8">{{
+                item.id
               }}</span>
               <span class="flex-1 text-left mr-8"
                 >{{ (item.amount * 1).toFixed(2) }} {{ item.token }}</span
@@ -661,8 +673,11 @@ export default {
       this.getCurrentTokenBalance();
     },
     "$store.state.userAddress"() {
+      
       if (this.$store.state.userAddress) {
         this.getTransferList();
+      } else {
+        this.resetInfo();
       }
     },
     // 获取服务费
@@ -688,6 +703,26 @@ export default {
     }
   },
   methods: {
+    // 处理余额
+    dealBalance(val) {
+      if(val=='--') {
+        return '--'
+      }
+      const data = val + '';
+      if(data.includes('.')) {
+        const array = data.split('.');
+        let second = ''
+        if(array[1].length > 3) {
+          second = array[1].slice(0,4)
+        } else {
+          const addZeroNum = 4 - array[1].length;
+          second = array[1] + new Array(2).fill(0).join('');
+        }
+        return `${array[0]}.${second}`
+      } else {
+        return data +'.0000'
+      }
+    },
     // 关闭unisat选择手续费
     closeChooseFee() {
       this.showUnisatChoosefee = false;
@@ -702,17 +737,24 @@ export default {
     },
     // 重置数据
     resetInfo() {
+      console.log(1111)
       this.$store.commit("setUseraddress", "");
       this.transferAmountData = null;
       this.ercAmount = "";
+      this.reciveAddr= '';
       this.feeData = {
         service: "",
         receive: "",
       };
+      this.tokenData = {
+        icon: ONFIimg,
+        name: "ONFI",
+      }
       this.hlist = [];
       this.hlistloading = true;
       this.finished = false;
       this.page = 1;
+      this.$store.commit('setBalance',[{name:'ORDI',balance: 0,transferableList:[],transferableBalance:0},{name:'RATS',balance: 0,transferableList:[],transferableBalance:0},{name:'SATS',balance: 0,transferableList:[],transferableBalance:0},{name:'ONFI',balance: 0,transferableList:[],transferableBalance:0}],)
     },
     // 费用接口
     async getFeeData() {
@@ -903,6 +945,24 @@ export default {
       if (this.reciveAddr == "") {
         ElNotification.warning("Please input recive address");
         return;
+      }
+      if(this.chain1Data.name == "Bitcoin") { // 检测以太坊地址正确性
+        if(!web3.utils.isAddress(this.reciveAddr)) {
+          ElNotification.warning("Invalid address");
+          return 
+        }
+      }
+      if(this.chain1Data.name != "Bitcoin") { // 检测比特币地址正确性
+        const str = this.reciveAddr.slice(0,1);
+        if(str!='3'&& str!='b'&& str!='1' && str!='B') {
+          ElNotification.warning("Invalid address");
+          return 
+        }
+        if(this.currentBalance== '--' || this.currentBalance == 0) {
+          ElNotification.warning("Insufficient balance");
+          return 
+        }
+        // const 
       }
       // loading 开始
       showLoadingToast({ duration: 0 });

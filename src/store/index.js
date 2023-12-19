@@ -59,6 +59,9 @@ const store = createStore({
   },
   actions: {
     async getBalance(context,address) {
+      if(!address) {
+        return 
+      }
       try {
         const res = await getTokensBalance({chain: context.state.mainChain,address,token: 'ordi,rats,sats,onfi' });
         console.log('transferableBalance',res)
