@@ -548,7 +548,7 @@
       <chooseunisatfee
         @close="closeChooseFee"
         :info="{ amount: transferAmountData.amount, reciveAddr }"
-        :feeData="feeData"
+        :feeData="unisatfeeData"
         v-if="showUnisatChoosefee"
         @confirm="unisatfeetransfer"
       />
@@ -622,7 +622,7 @@ export default {
       },
       // unisat跨链 选择手续费
       showUnisatChoosefee: false,
-      feeData: {},
+      unisatfeeData: {},
       // 列表数据
       hlist: [],
       hlistChainImg: {
@@ -698,14 +698,14 @@ export default {
       this.$store.commit("setUseraddress", "");
       this.transferAmountData = null;
       this.ercAmount = "";
-      (this.feeData = {
+      this.feeData = {
         service: "",
         receive: "",
-      }),
-        (this.hlist = []),
-        (this.hlistloading = true),
-        (this.finished = false),
-        (this.page = 1);
+      };
+      this.hlist = [];
+      this.hlistloading = true;
+      this.finished = false;
+      this.page = 1;
     },
     // 费用接口
     async getFeeData() {
@@ -927,7 +927,7 @@ export default {
         if (data) {
           closeToast();
           this.showUnisatChoosefee = true;
-          this.feeData = data;
+          this.unisatfeeData = data;
         }
       } catch (error) {
         console.log(error);
