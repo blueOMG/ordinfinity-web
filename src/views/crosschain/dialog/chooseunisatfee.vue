@@ -185,7 +185,7 @@ export default {
     },
     transferFn() {
       if (
-        this.selectFee == 4 &&
+        this.selectedFee == 4 &&
         (this.customFeeValue == "" || isNaN(this.customFeeValue * 1))
       ) {
         ElNotification.warning("Please input custom fee");
@@ -193,7 +193,7 @@ export default {
       }
       this.$emit("confirm", {
         ...this.feeData,
-        fee: this.selectFee == 4 ? this.customFeeValue : this.fee,
+        fee: this.selectedFee == 4 ? this.customFeeValue : this.fee,
       });
     },
   },

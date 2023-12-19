@@ -719,6 +719,7 @@ export default {
         from_chain: this.chain1Data.chainStr,
         to_chain: this.chain2Data.chainStr,
         amount,
+        token: this.tokenData.name
       });
       if (res.data) {
         this.feeData = res.data;
@@ -838,7 +839,7 @@ export default {
         const res = await okxwallet.bitcoin.inscribe({
           type: 51,
           from: this.$store.state.userAddress,
-          tick: this.tokenData.name.toLocaleLowerCase(),
+          tick: this.tokenData.name == 'ONFI' ?"ONFI" : this.tokenData.name.toLocaleLowerCase(),
         });
         this.refreshBalance();
       }
@@ -851,7 +852,7 @@ export default {
         const res = await getTokensBalance({
           chain: mainChain,
           address: userAddress,
-          token: "ordi,RATS,TTIN,onfi",
+          token: "ordi,rats,sats,onfi",
         });
         const data = res.data.map((item) => ({
           balance: item.availableBalance || item.balance || 0,
@@ -866,7 +867,7 @@ export default {
         const data = [
           { name: "ORDI", balance: 0, transferableList: [] },
           { name: "RATS", balance: 0, transferableList: [] },
-          { name: "TTIN", balance: 0, transferableList: [] },
+          { name: "SATS", balance: 0, transferableList: [] },
           {
             name: "ONFI",
             balance: 0,
@@ -936,6 +937,7 @@ export default {
       }
     },
     async unisatfeetransfer(data) {
+      console.log(data)
       this.showUnisatChoosefee = false;
       showLoadingToast({ duration: 0 });
       try {
@@ -993,8 +995,9 @@ export default {
         const contract = new web3js.eth.Contract(abi.coinAbi, res.data.tx.to, {
           from: this.$store.state.userAddress,
         });
+        const amount = utils.mathlog(res.data.burn_amount,res.data.decim);
         const hash = await contract.methods
-          .burnWithPayment(res.data.burn_amount + "")
+          .burnWithPayment(amount)
           .send({ from: this.$store.state.userAddress });
         console.log("调用来转", hash);
         // web3.js 调用来转

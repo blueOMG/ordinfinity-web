@@ -136,7 +136,7 @@ export default {
       utils.accountChange();
     },
     async getBalance(address) {
-      const res = getTokensBalance({address,token: 'ordi,RATS,TTIN,onfi' });
+      const res = getTokensBalance({address,token: 'ordi,rats,sats,onfi' });
       console.log(res)
       this.$store.commit()
     },

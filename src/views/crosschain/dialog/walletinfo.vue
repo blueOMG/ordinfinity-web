@@ -49,8 +49,7 @@ export default {
     },
     disconnect() {
       const type = localStorage.getItem('WALLETTYPE');
-      if(type=='sat') {
-      } else {
+      if(type=='okx') {
         okxwallet.disconnect();
       }
       
