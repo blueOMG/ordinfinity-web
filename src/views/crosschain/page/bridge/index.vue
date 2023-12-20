@@ -213,7 +213,7 @@
                     </div>
                   </div>
                   <div
-                    class="m-[0.5rem] h-[2.5rem] flex items-center justify-center text-[#fff] text-[1.2rem] lg:text-[1rem] cursor-pointer bg-[#F7931A] rounded-lg"
+                    class="m-[0.5rem] lg:h-[2.5rem] h-[3rem] flex items-center justify-center text-[#fff] text-[1.2rem] lg:text-[1rem] cursor-pointer bg-[#F7931A] rounded-lg"
                     @click="customAdd"
                   >
                     New inscription
@@ -959,6 +959,10 @@ export default {
           return 
         }
         if(this.currentBalance== '--' || this.currentBalance == 0) {
+          ElNotification.warning("Insufficient balance");
+          return 
+        }
+        if(this.ercAmount*1 > this.currentBalance*1) {
           ElNotification.warning("Insufficient balance");
           return 
         }
