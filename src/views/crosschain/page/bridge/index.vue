@@ -367,7 +367,7 @@
               >
                 <span class="text-[#999999]">Amount</span>
                 <span class="text-white font-bold"
-                  >{{ (item.amount * 1).toFixed(2) }} {{ item.token }}</span
+                  >{{ dealBalance(item.amount) }} {{ item.token }}</span
                 >
               </div>
               <div
@@ -461,7 +461,7 @@
                 item.id
               }}</span>
               <span class="flex-1 text-left mr-8"
-                >{{ (item.amount * 1).toFixed(2) }} {{ item.token }}</span
+                >{{ dealBalance(item.amount) }} {{ item.token }}</span
               >
               <span class="w-[8rem] text-left mr-8">{{
                 item.fee || "--"
