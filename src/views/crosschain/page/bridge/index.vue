@@ -1098,9 +1098,13 @@ export default {
         if (res.message == "success") {
           ElNotification.success("create success");
           closeToast();
+          this.ercAmount = '';
+          this.reciveAddr = '';
+          this.transferAmountData = null;
           this.page = 1;
           this.$nextTick(() => {
             this.getTransferList();
+            this.refreshBalance();
           });
         } else {
           setTimeout(() => {
